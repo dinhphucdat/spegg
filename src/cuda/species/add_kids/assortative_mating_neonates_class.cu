@@ -4,12 +4,16 @@
 
 #define NLOCI 50
 
+/// @brief @deprecated
 float recomb_array_assort[NLOCI] = {0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,0.5f, 0.5f, 0.5f, 0.5f, 0.5f};
 
 
-Assortative_mating_neonates::Assortative_mating_neonates(thrust::device_vector<int> &pair_populations, DemeSettings *subpopParameters, thrust::device_vector<int> &everybodys_deme, thrust::device_vector<int> &kids_per_mom,  thrust::device_vector<int> &current_deme_sizes, thrust::device_vector<int> &maximum_deme_sizes, int N_alive_inds,  int num_loci, int nPhen) : EggsNeonates(subpopParameters, everybodys_deme, kids_per_mom, current_deme_sizes, maximum_deme_sizes, N_alive_inds, num_loci, nPhen) 
+Assortative_mating_neonates::Assortative_mating_neonates(inds_stochastic* species, thrust::device_vector<int> &kids_per_mom, thrust::device_vector<int> &pair_populations, int Num_Subpopulations) : EggsNeonates(species, kids_per_mom) 
 	{
-
+	// how many subpopulations depends on how many demes there are
+	
+	// the number of the current population is the sum of all the deme sizes
+	current_pop_size = species->size;
 	pairs_per_deme.resize(Num_Subpopulations);
 	
 	// Determine how many pairs are in each subpopulation
@@ -44,7 +48,7 @@ void Assortative_mating_neonates::inherit_genotypes_by_pair(thrust::device_vecto
 
 	get_paternally_derived_genotype_deterministic(fathers_chosen, mgenotype, fgenotype, generator);
 
-	mutate(generator, fgenotype, mgenotype);
+	mutate(mgenotype, fgenotype);
 	}
 
 void Assortative_mating_neonates::get_mating_pair(thrust::device_vector<float> &probability_pair_becomes_parents,
@@ -55,7 +59,7 @@ void Assortative_mating_neonates::get_mating_pair(thrust::device_vector<float> &
 	{
 
 
-	mating_subpopThrustProbTable at;
+	mating_ThrustProbTable_demes at;
 	thrust::device_vector<int> pair_index(Total_Number_of_Neonates);
 	thrust::device_vector<float> rand(Total_Number_of_Neonates);
 	float *rand_ptr = raw_pointer_cast(&rand[0]);
@@ -69,7 +73,7 @@ void Assortative_mating_neonates::get_mating_pair(thrust::device_vector<float> &
  
 	at.determine_key_offsets( Num_Subpopulations, pairs_per_deme );
  
-	at.adjust_randoms(rand.begin(), rand.end(), kids_pop.begin(), kids_pop.end());
+	at.adjust_randoms(rand.begin(), rand.end(), Neonates_per_Deme.begin(), Neonates_per_Deme.end());
  
 	at.draw(rand.begin(), rand.end(), pair_index.begin());
 

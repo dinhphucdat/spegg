@@ -20,14 +20,11 @@
 class Assortative_mating_neonates :  public EggsNeonates 
 	{
 	public:
-		Assortative_mating_neonates(thrust::device_vector<int> &pair_populations, DemeSettings *subpopParameters,
-				   thrust::device_vector<int> &everybodys_deme,
-				   thrust::device_vector<int> &kids_per_mom,
-				   thrust::device_vector<int> &current_deme_sizes,
-				   thrust::device_vector<int> &maximum_deme_sizes,
-				   int N_alive_inds,
-				   int num_loci,
-				   int nPhen);
+		Assortative_mating_neonates(
+			inds_stochastic* species, 
+			thrust::device_vector<int> &kids_per_mom, 
+			thrust::device_vector<int> &pair_populations, 
+			int Num_Subpopulations);
 
 		void inherit_genotypes_by_pair(thrust::device_vector<float> &probability_pair_becomes_parents,
 					thrust::device_vector<int> &fathers_list,
@@ -49,6 +46,8 @@ class Assortative_mating_neonates :  public EggsNeonates
 	protected:
 		thrust::device_vector<int> mothers_chosen;
 		thrust::device_vector<int> fathers_chosen;
+		int Num_Subpopulations;
+		int current_pop_size;
 	 
 
 		void get_maternally_derived_genotype_deterministic(thrust::device_vector<int> &mother_index,
