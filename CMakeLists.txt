@@ -17,7 +17,7 @@ set(CMAKE_C_COMPILER "/usr/bin/gcc")
 set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 
 # Set CUDA compiler explicitly
-set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc")
+# set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc")
 
 # Set cuda architecture and optimization flags
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -O3 --extended-lambda --expt-relaxed-constexpr")
