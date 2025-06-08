@@ -41,36 +41,18 @@ jobs:
         if: steps.check-cuda.outputs.cuda_available == 'false'
         run: |
           echo "Installing CUDA..."
-          # Detect Ubuntu version and use appropriate repository
-          UBUNTU_VERSION=$(lsb_release -rs)
-          echo "Detected Ubuntu version: $UBUNTU_VERSION"
+          # Enable multiverse repository (needed for CUDA on Ubuntu)
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository multiverse
+          sudo apt-get update
           
-          if [[ "$UBUNTU_VERSION" == "24.04" ]]; then
-            # Use Ubuntu 24.04 repository (or fallback to 22.04 with fixes)
-            wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb 2>/dev/null || \
-            wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb
-            sudo dpkg -i cuda-keyring_*.deb
-            sudo apt-get update
-            
-            # Install missing dependency for Ubuntu 24.04
-            sudo apt-get install -y libtinfo5 || echo "libtinfo5 not available, trying alternative"
-            
-            # Try to install CUDA toolkit (minimal version to avoid conflicts)
-            sudo apt-get install -y cuda-toolkit-12-4 || \
-            sudo apt-get install -y cuda-compiler-12-4 cuda-cudart-dev-12-4 cuda-nvcc-12-4
-            
-          else
-            # Use Ubuntu 22.04 repository for older versions
-            wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb
-            sudo dpkg -i cuda-keyring_1.0-1_all.deb
-            sudo apt-get update
-            sudo apt-get install -y cuda-toolkit-12-4
-          fi
+          # Install CUDA toolkit from Ubuntu's official repository
+          # This is the most reliable method for Ubuntu 24.04
+          sudo apt-get install -y nvidia-cuda-toolkit
           
-          # Set up environment
-          echo 'export PATH=/usr/local/cuda/bin:$PATH' >> $GITHUB_ENV
-          echo 'export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH' >> $GITHUB_ENV
-          echo 'export CUDA_HOME=/usr/local/cuda' >> $GITHUB_ENV
+          # Set up environment variables
+          echo 'export PATH=/usr/bin:$PATH' >> $GITHUB_ENV
+          echo 'export CUDA_HOME=/usr' >> $GITHUB_ENV
 
 
       # Build the project
