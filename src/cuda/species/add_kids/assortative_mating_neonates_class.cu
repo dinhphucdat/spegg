@@ -4,22 +4,27 @@
 
 #define NLOCI 50
 
-/// @brief @deprecated
 float recomb_array_assort[NLOCI] = {0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,0.5f, 0.5f, 0.5f, 0.5f, 0.5f};
 
-
-Assortative_mating_neonates::Assortative_mating_neonates(inds_stochastic* species, thrust::device_vector<int> &kids_per_mom, thrust::device_vector<int> &pair_populations, int Num_Subpopulations) : EggsNeonates(species, kids_per_mom) 
+// TODO: The parent class has up to 2 constructors, but here I only see one which is a longer parameter list one. So think in order to 
+// ensure that we can initialize the parent class properly, we need to create another two-parameter constructor as the parent class did 
+// which takes in the species object and kids_per_mom vector!
+Assortative_mating_neonates::Assortative_mating_neonates(inds_stochastic* species, thrust::device_vector<int> &kids_per_mom) : EggsNeonates(species, kids_per_mom) 
 	{
 	// how many subpopulations depends on how many demes there are
 	
 	// the number of the current population is the sum of all the deme sizes
+	this->Num_Subpopulations = species->demeParameters->check_number_of_demes();
 	current_pop_size = species->size;
+	thrust::device_vector<int> pair_populations = species->deme;
+	// the pairs per deme cannot be the deme vector from species object!!!!
 	pairs_per_deme.resize(Num_Subpopulations);
 	
 	// Determine how many pairs are in each subpopulation
 	thrust::counting_iterator<int> search_begin(0);
 	thrust::device_vector<int> temp_Subpop_sizes;
-
+	// TODO: Note that the inds_stochastic object has `deme_size` vector, so is it a need to 
+	// recalculate the number of individuals in each deme?
 	temp_Subpop_sizes.resize(Num_Subpopulations);
 
 	thrust::upper_bound(pair_populations.begin(), pair_populations.end(),
@@ -35,30 +40,26 @@ void Assortative_mating_neonates::inherit_genotypes_by_pair(thrust::device_vecto
 				thrust::device_vector<int> &fathers_list,
 				thrust::device_vector<int> &mothers_list,
 				thrust::device_vector<float> *&fgenotype,
-				thrust::device_vector<float> *&mgenotype,
-				curandGenerator_t generator)
+				thrust::device_vector<float> *&mgenotype)
 	{
 
 	mothers_chosen.resize(Total_Number_of_Neonates);
 	fathers_chosen.resize(Total_Number_of_Neonates);
 
-	get_mating_pair(probability_pair_becomes_parents, fathers_list, mothers_list, generator);
+	get_mating_pair(probability_pair_becomes_parents, fathers_list, mothers_list);
 
-	get_maternally_derived_genotype_deterministic(mothers_chosen, mgenotype, fgenotype, generator);
+	get_maternally_derived_genotype_deterministic(mothers_chosen, mgenotype, fgenotype);
 
-	get_paternally_derived_genotype_deterministic(fathers_chosen, mgenotype, fgenotype, generator);
+	get_paternally_derived_genotype_deterministic(fathers_chosen, mgenotype, fgenotype);
 
 	mutate(mgenotype, fgenotype);
 	}
 
 void Assortative_mating_neonates::get_mating_pair(thrust::device_vector<float> &probability_pair_becomes_parents,
 						   thrust::device_vector<int> &fathers_list,
-						   thrust::device_vector<int> &mothers_list,
-						   curandGenerator_t generator
+						   thrust::device_vector<int> &mothers_list
 						  )
 	{
-
-
 	mating_ThrustProbTable_demes at;
 	thrust::device_vector<int> pair_index(Total_Number_of_Neonates);
 	thrust::device_vector<float> rand(Total_Number_of_Neonates);
@@ -66,22 +67,22 @@ void Assortative_mating_neonates::get_mating_pair(thrust::device_vector<float> &
 /*
 	Feed reproductive probablity into the setup of the alias table.
 	Draw from the alias table to determine mothers.
-*/
-	at.setup(probability_pair_becomes_parents.begin(), probability_pair_becomes_parents.end());
+*/	
+	at.setup(probability_pair_becomes_parents.begin(), probability_pair_becomes_parents.begin() + previous_pop_size);
 
-	curandGenerateUniform(generator, rand_ptr, Total_Number_of_Neonates);
+	curandGenerateUniform(this->gen, rand_ptr, Total_Number_of_Neonates);
  
-	at.determine_key_offsets( Num_Subpopulations, pairs_per_deme );
+	at.determine_key_offsets( Num_Subpopulations, species->deme_sizes );
  
-	at.adjust_randoms(rand.begin(), rand.end(), Neonates_per_Deme.begin(), Neonates_per_Deme.end());
+	at.adjust_randoms(rand.begin(), rand.end(), kids_deme.begin(), kids_deme.end());
  
 	at.draw(rand.begin(), rand.end(), pair_index.begin());
 
  		
-	thrust::gather(pair_index.begin(), pair_index.end(), fathers_list.begin(), fathers_chosen.begin());
+	// thrust::gather(pair_index.begin(), pair_index.end(), fathers_list.begin(), fathers_chosen.begin());
 
  
-	thrust::gather(pair_index.begin(), pair_index.end(), mothers_list.begin(), mothers_chosen.begin());
+	thrust::gather(pair_index.begin(), pair_index.end(), species->deme.begin(), mothers_chosen.begin());
 
 	}
 
@@ -89,31 +90,29 @@ void Assortative_mating_neonates::get_mating_pair(thrust::device_vector<float> &
 	
 void Assortative_mating_neonates::get_maternally_derived_genotype_deterministic(thrust::device_vector<int> &mother_index,
 					     thrust::device_vector<float> *&mgenotype,
-					     thrust::device_vector<float> *&fgenotype,
-					     curandGenerator_t generator)
+					     thrust::device_vector<float> *&fgenotype)
 	{
 	thrust::device_vector<float> rand(Total_Number_of_Neonates);
 	float *rand_ptr = raw_pointer_cast(&rand[0]);
-	curandGenerateUniform(generator, rand_ptr, Total_Number_of_Neonates);
+	curandGenerateUniform(this->gen, rand_ptr, Total_Number_of_Neonates);
 	
 	thrust::device_vector<int> parity(Total_Number_of_Neonates);
 	thrust::fill(parity.begin(), parity.end(), 0);
 
 	for (int i = 0 ; i < nloci ; i++) 
 		{
-		curandGenerateUniform(generator, rand_ptr, Total_Number_of_Neonates);
-                recombine(rand, mother_index, parity, fgenotype, mgenotype, fgenotype[i], i);
+		curandGenerateUniform(this->gen, rand_ptr, Total_Number_of_Neonates);
+        recombine(rand, mother_index, parity, fgenotype, mgenotype, fgenotype[i], i);
 		}
 	}
 
 void Assortative_mating_neonates::get_paternally_derived_genotype_deterministic(thrust::device_vector<int> &father_index,
 					     thrust::device_vector<float> *&mgenotype,
-					     thrust::device_vector<float> *&fgenotype,
-					     curandGenerator_t generator)
+					     thrust::device_vector<float> *&fgenotype)
 	{
 	thrust::device_vector<float> rand(Total_Number_of_Neonates);
 	float *rand_ptr = raw_pointer_cast(&rand[0]);
-	curandGenerateUniform(generator, rand_ptr, Total_Number_of_Neonates);
+	curandGenerateUniform(this->gen, rand_ptr, Total_Number_of_Neonates);
 	
 	//Reset parity to zeroes
 	thrust::device_vector<int> parity(Total_Number_of_Neonates);
@@ -122,7 +121,7 @@ void Assortative_mating_neonates::get_paternally_derived_genotype_deterministic(
 	//Recombination for mgenotype
 	for (int i = 0 ; i < nloci ; i++) 
 		{
-		curandGenerateUniform(generator, rand_ptr,Total_Number_of_Neonates);
+		curandGenerateUniform(this->gen, rand_ptr,Total_Number_of_Neonates);
 		recombine(rand, father_index, parity, fgenotype, mgenotype, mgenotype[i], i);
 		}
 	}

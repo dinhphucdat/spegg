@@ -22,21 +22,17 @@ class Assortative_mating_neonates :  public EggsNeonates
 	public:
 		Assortative_mating_neonates(
 			inds_stochastic* species, 
-			thrust::device_vector<int> &kids_per_mom, 
-			thrust::device_vector<int> &pair_populations, 
-			int Num_Subpopulations);
+			thrust::device_vector<int> &kids_per_mom);
 
 		void inherit_genotypes_by_pair(thrust::device_vector<float> &probability_pair_becomes_parents,
 					thrust::device_vector<int> &fathers_list,
 					thrust::device_vector<int> &mothers_list,
 					thrust::device_vector<float> *&fgenotype,
-					thrust::device_vector<float> *&mgenotype,
-					curandGenerator_t generator);
+					thrust::device_vector<float> *&mgenotype);
 
 		void get_mating_pair(thrust::device_vector<float> &probability_pair_becomes_parents,
 				      thrust::device_vector<int> &fathers_list,
-				      thrust::device_vector<int> &mothers_list,
-				      curandGenerator_t generator);
+				      thrust::device_vector<int> &mothers_list);
 
 
 		void record_parents(thrust::device_vector<int> &maternal_id, 
@@ -52,13 +48,11 @@ class Assortative_mating_neonates :  public EggsNeonates
 
 		void get_maternally_derived_genotype_deterministic(thrust::device_vector<int> &mother_index,
 						     thrust::device_vector<float> *&mgenotype,
-						     thrust::device_vector<float> *&fgenotype,
-						     curandGenerator_t generator);
+						     thrust::device_vector<float> *&fgenotype);
 
 		void get_paternally_derived_genotype_deterministic(thrust::device_vector<int> &father_index,
 						     thrust::device_vector<float> *&mgenotype,
-						     thrust::device_vector<float> *&fgenotype,
-						     curandGenerator_t generator);
+						     thrust::device_vector<float> *&fgenotype);
 
 		thrust::device_vector<int> pairs_per_deme;
 	};

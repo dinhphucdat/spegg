@@ -1,0 +1,188 @@
+number_of_demes = 4
+species_data = (
+    {
+        number_of_species_specific_values = 3
+        species_specific_values_names = ["FECUNDITY_PHENOTYPE_INDEX","MORTALITY_PHENOTYPE_INDEX", "WING_COLOR_INDEX"]
+
+        FECUNDITY_PHENOTYPE_INDEX = 0.0
+        MORTALITY_PHENOTYPE_INDEX = 1.0
+        WING_COLOR_INDEX = 2.0
+
+        number_of_parameters = 4
+        parameter_names = ["M_reproductive_advantage", "F_reproductive_advantage","TARGET_WING_COLOR","WING_COLOR_DECAY"]
+
+        demes_specifications = (
+                                        {#deme0
+                                        M_reproductive_advantage = 1.0
+                                        F_reproductive_advantage = 1.0
+                                        TARGET_WING_COLOR = 0.808080
+                                        WING_COLOR_DECAY = 0.3
+                                        },
+                                        {#deme1
+                                        M_reproductive_advantage = 1.0
+                                        F_reproductive_advantage = 1.0
+                                        TARGET_WING_COLOR = 0.809120
+                                        WING_COLOR_DECAY = 0.2
+                                        },
+                                        {#deme3
+                                        M_reproductive_advantage = 1.0
+                                        F_reproductive_advantage = 1.0
+                                        TARGET_WING_COLOR = 0.809120
+                                        WING_COLOR_DECAY = 0.1
+                                        },
+                                        {#deme3
+                                        M_reproductive_advantage = 1.0
+                                        F_reproductive_advantage = 1.0
+                                        TARGET_WING_COLOR = 0.809120
+                                        WING_COLOR_DECAY = 0.1
+                                        }
+                                      )         
+    }
+)
+species_genetics = (
+    {
+        number_of_loci = 3
+        number_of_phenotypes = 3
+        phenotype_names = ["FECUNDITY_PHENOTYPE_INDEX","MORTALITY_PHENOTYPE_INDEX", "WING_COLOR_INDEX"]
+        recombination_rates = [0.5, 0.4, 0.3]
+
+        locus_specifications = (
+            {
+                #locus0
+                mutation_parameters = (
+								{#deme0
+								MUTATION_RATE = 0.0001
+								MUTATION_MAGNITUDE = 0.1
+								},
+								{#deme1
+								MUTATION_RATE = 0.0001
+								MUTATION_MAGNITUDE = 0.2
+								},
+                                {#deme2
+								MUTATION_RATE = 0.0001
+								MUTATION_MAGNITUDE = 0.3
+								},
+                                {#deme2
+								MUTATION_RATE = 0.0001
+								MUTATION_MAGNITUDE = 0.3
+								}
+								)
+            },
+            {
+                #locus1
+                mutation_parameters = (
+								{#deme0
+								MUTATION_RATE = 0.0002
+								MUTATION_MAGNITUDE = 0.15
+								},
+								{#deme1
+								MUTATION_RATE = 0.0002
+								MUTATION_MAGNITUDE = 0.25
+								},
+                                {#deme2
+								MUTATION_RATE = 0.0002
+								MUTATION_MAGNITUDE = 0.35
+								},
+                                {#deme2
+								MUTATION_RATE = 0.0002
+								MUTATION_MAGNITUDE = 0.35
+								}
+								)
+            },
+            {
+                #locus2
+                mutation_parameters = (
+								{#deme0
+								MUTATION_RATE = 0.0003
+								MUTATION_MAGNITUDE = 0.2
+								},
+								{#deme1
+								MUTATION_RATE = 0.0003
+								MUTATION_MAGNITUDE = 0.3
+								},
+                                {#deme2
+								MUTATION_RATE = 0.0003
+								MUTATION_MAGNITUDE = 0.4
+								},
+                                {#deme2
+								MUTATION_RATE = 0.0003
+								MUTATION_MAGNITUDE = 0.4
+								}
+								)
+            }
+        )
+        phenotype_specifications = (
+                                        {#phenotype0
+                                        number_of_genotype_phenotype_map_parameters = 3
+                                        names_of_genotype_phenotype_map_parameters = ["GENPHEN_MAP_CONSTANT",
+                                                                                        "GENPHEN_MAP_COEF0",
+                                                                                        "GENPHEN_MAP_COEF1"]
+                                        genotype_phenotype_map_parameters = ({
+                                            #deme0
+                                            GENPHEN_MAP_CONSTANT = 10.0
+                                            GENPHEN_MAP_COEF0 = 1.0
+                                            GENPHEN_MAP_COEF1 = 1.0
+                                        },{
+                                            #deme1
+                                            GENPHEN_MAP_CONSTANT = 10.0
+                                            GENPHEN_MAP_COEF0 = 1.0
+                                            GENPHEN_MAP_COEF1 = 1.0
+                                        }, {
+                                            #deme2
+                                            GENPHEN_MAP_CONSTANT = 10.0
+                                            GENPHEN_MAP_COEF0 = 1.0
+                                            GENPHEN_MAP_COEF1 = 1.0
+                                        }, {
+                                            #deme2
+                                            GENPHEN_MAP_CONSTANT = 10.0
+                                            GENPHEN_MAP_COEF0 = 1.0
+                                            GENPHEN_MAP_COEF1 = 1.0
+                                        })
+                                        },
+                                       {#phenotype1
+                                        number_of_genotype_phenotype_map_parameters = 2
+                                        names_of_genotype_phenotype_map_parameters = ["GENPHEN_MAP_CONSTANT",
+                                                                                        "GENPHEN_MAP_COEF0"]
+                                        genotype_phenotype_map_parameters = ({
+                                            #deme0
+                                            GENPHEN_MAP_CONSTANT = 0.5
+                                            GENPHEN_MAP_COEF0 = 1.5
+                                        },{
+                                            #deme1
+                                            GENPHEN_MAP_CONSTANT = 0.5
+                                            GENPHEN_MAP_COEF0 = 1.5
+                                        }, {
+                                            #deme2
+                                            GENPHEN_MAP_CONSTANT = 0.5
+                                            GENPHEN_MAP_COEF0 = 1.5
+                                        }, {
+                                            #deme2
+                                            GENPHEN_MAP_CONSTANT = 0.5
+                                            GENPHEN_MAP_COEF0 = 1.5
+                                        })
+                                        },
+                                        {#phenotype2
+                                        number_of_genotype_phenotype_map_parameters = 2
+                                        names_of_genotype_phenotype_map_parameters = ["GENPHEN_MAP_CONSTANT",
+                                                                                        "GENPHEN_MAP_COEF0"]
+                                        genotype_phenotype_map_parameters = ({
+                                            #deme0
+                                            GENPHEN_MAP_CONSTANT = 0.25
+                                            GENPHEN_MAP_COEF0 = 2.0
+                                        },{
+                                            #deme1
+                                            GENPHEN_MAP_CONSTANT = 0.25
+                                            GENPHEN_MAP_COEF0 = 2.0
+                                        }, {
+                                            #deme2
+                                            GENPHEN_MAP_CONSTANT = 0.25
+                                            GENPHEN_MAP_COEF0 = 2.0
+                                        }, {
+                                            #deme2
+                                            GENPHEN_MAP_CONSTANT = 0.25
+                                            GENPHEN_MAP_COEF0 = 2.0
+                                        })
+                                        }
+        )               
+    }
+)

@@ -1,0 +1,49 @@
+name: Build and Test CUDA with GoogleTest
+
+on:
+  push:
+    branches:
+      - main
+      - refactor_code
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Install dependencies
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ gcc libconfig++-dev
+
+      # Set up CUDA
+      - name: Set up CUDA
+        uses: NVIDIA/setup-cuda@v3
+        with:
+          version: 12.4  # Replace with your CUDA version
+
+      # Build the project
+      - name: Build Project
+        run: |
+          mkdir -p build
+          cd build
+          cmake ..
+          make
+
+      # Run tests
+      - name: Run GoogleTest
+        run: |
+          cd AssortativeTest
+          mkdir -p build
+          cd build
+          cmake ..
+          make
+          ./AssortativeTest  # Replace with your actual test executable
