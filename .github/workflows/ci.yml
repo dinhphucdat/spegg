@@ -24,11 +24,35 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y cmake g++ gcc libconfig++-dev
 
-      # Set up CUDA
-      - name: Set up CUDA
-        uses: NVIDIA/setup-cuda@v1
-        with:
-          version: 12.4  # Replace with your CUDA version
+      # Conditional CUDA installation
+      - name: Check if CUDA is already installed
+        id: check-cuda
+        run: |
+          if command -v nvcc &> /dev/null; then
+            echo "cuda_available=true" >> $GITHUB_OUTPUT
+            echo "CUDA is already available:"
+            nvcc --version
+          else
+            echo "cuda_available=false" >> $GITHUB_OUTPUT
+            echo "CUDA not found, will install"
+          fi
+
+      - name: Install CUDA (if not available)
+        if: steps.check-cuda.outputs.cuda_available == 'false'
+        run: |
+          echo "Installing CUDA..."
+          # Add NVIDIA package repository
+          wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb
+          sudo dpkg -i cuda-keyring_1.0-1_all.deb
+          sudo apt-get update
+          
+          # Install CUDA toolkit
+          sudo apt-get install -y cuda-toolkit-12-4
+          
+          # Set up environment
+          echo 'export PATH=/usr/local/cuda/bin:$PATH' >> $GITHUB_ENV
+          echo 'export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH' >> $GITHUB_ENV
+          echo 'export CUDA_HOME=/usr/local/cuda' >> $GITHUB_ENV
 
       # Build the project
       - name: Build Project
