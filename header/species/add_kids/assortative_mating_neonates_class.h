@@ -10,7 +10,7 @@
 #include <util/reduce_by_key_with_zeroes.h>
 #include <species/deme_specific_data_class.h>
 #include <util/amplify.h>
-#include <math/mating_subpop_thrust_prob_table.h>
+#include <math/mating_thrust_prob_table_demes.h>
 #include <math/random_variables_functions.h>
 #include <species/add_kids/neonates_class.h>
 #include <util/one_dim_two_dim.h>
