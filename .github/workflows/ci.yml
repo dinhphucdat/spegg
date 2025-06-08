@@ -26,7 +26,7 @@ jobs:
 
       # Set up CUDA
       - name: Set up CUDA
-        uses: NVIDIA/setup-cuda@v2
+        uses: NVIDIA/setup-cuda@v1
         with:
           version: 12.4  # Replace with your CUDA version
 
