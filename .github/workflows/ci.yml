@@ -53,6 +53,17 @@ jobs:
           # Set up environment variables
           echo 'export PATH=/usr/bin:$PATH' >> $GITHUB_ENV
           echo 'export CUDA_HOME=/usr' >> $GITHUB_ENV
+      
+      # Clone rapid_csv if not present:
+      - name: RapidCSV prep
+        run: |
+          if [[ ! -d header/util/rapidcsv/src ]]; then
+            cd header/util
+            if [[ -d rapidcsv ]]; then
+              rm -r rapidcsv
+            fi
+            git clone --recursive https://github.com/d99kris/rapidcsv.git
+          fi
 
 
       # Build the project
@@ -66,7 +77,7 @@ jobs:
       # Run tests
       - name: Run GoogleTest
         run: |
-          cd AssortativeTest
+          cd tests/AssortativeTest
           mkdir -p build
           cd build
           cmake ..
