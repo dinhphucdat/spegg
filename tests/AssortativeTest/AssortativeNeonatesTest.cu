@@ -1,5 +1,6 @@
 #include<iostream>
 #include"gtest/gtest.h"
+#include"gmock/gmock.h"
 #include"GenPhenMapTest.h"
 #include<species/inds_stochastic.h>
 #include<species/add_kids/neonates_class.h>
@@ -125,10 +126,9 @@ TEST_F(TestSpecies, AssortativeNeonatePairsDeme) {
     ASSERT_NE(neonate->kids_deme.size(), 0);
     ASSERT_EQ(neonate->get_mothers_chosen().size(), neonate->kids_deme.size());
     // for (int i = 0; i < 15; i++) // --> this is gonna pass the test
-    for (int i = 0; i < mothers_chosen.size(); i++) {
-        SCOPED_TRACE("Testing index " + std::to_string(i) + " - will be interrupted if there is an error");
-        EXPECT_PRED_FORMAT2(expectEq, neonate->kids_deme[i], mothers_chosen[i]);
-    }
+    thrust::host_vector<int> kids_deme_copy = neonate->kids_deme;
+    thrust::host_vector<int> mothers_chosen_copy = mothers_chosen;
+    EXPECT_THAT(kids_deme_copy, ::testing::ContainerEq(mothers_chosen_copy));
 }
 
 
@@ -201,11 +201,15 @@ TEST_F(TestSpeciesNoAssort, AssortativeNeonatePairsDeme) {
     neonate->inherit_genotypes(parents->probability_individual_becomes_female_parent, 
         parents->probability_individual_becomes_male_parent);
     ASSERT_NE(neonate->kids_deme.size(), 0);
-    // for (int i = 0; i < 15; i++) {// --> this is gonna pass the test
-    for (int i = 0; i < neonate->kids_deme.size(); i++) {
-        SCOPED_TRACE("Testing index " + std::to_string(i) + " - will be interrupted if there is an error");
-        EXPECT_PRED_FORMAT2(expectEq, neonate->kids_deme[i], deme[maternal_id[i + neonate->previous_pop_size]]);
-    }
+    thrust::device_vector<int> maternal_id_chosen(neonate->Total_Number_of_Neonates);
+    thrust::copy(maternal_id.begin() + neonate->previous_pop_size, 
+        maternal_id.begin() + neonate->previous_pop_size + neonate->Total_Number_of_Neonates, 
+        maternal_id_chosen.begin());
+    thrust::device_vector<int> mothers_deme(neonate->Total_Number_of_Neonates);
+    thrust::gather(maternal_id_chosen.begin(), maternal_id_chosen.end(), deme.begin(), mothers_deme.begin());
+    thrust::host_vector<int> mothers_deme_copy = mothers_deme;
+    thrust::host_vector<int> kids_deme_copy = neonate->kids_deme;
+    EXPECT_THAT(kids_deme_copy, ::testing::ContainerEq(mothers_deme_copy));
 }
 
 
