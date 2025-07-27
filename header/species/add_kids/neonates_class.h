@@ -50,7 +50,7 @@ class EggsNeonates
 		/// @brief number of newborns per deme
 		thrust::device_vector<int> Neonates_per_Deme;
 		/// @brief the list of demes that any newborn belongs to
-		thrust::device_vector<int> kids_deme;
+		thrust::device_vector<int> kids_deme; 
 
 	protected:
 		/// @brief the @link inds @endlink object representing individuals of a species
@@ -79,6 +79,7 @@ class EggsNeonates
 							thrust::device_vector<int> &kids_per_mom,			
 							thrust::device_vector<int> &current_deme_sizes,
 							thrust::device_vector<int> &maximum_deme_sizes);
+		
 		/**
 		 * @brief Calculate the offspring's genotypes at the maternally inherited loci.
 		 *
@@ -110,8 +111,7 @@ class EggsNeonates
 		 */
 		void get_paternally_derived_genotype(thrust::device_vector<float> &probability_individuals_become_fathers, thrust::device_vector<float> *&mgenotype, thrust::device_vector<float> *&fgenotype);
 
-		/// @brief @deprecated
-		/// @param subpopParameters 
+		
 		void egg_mortality(DemeSettings *subpopParameters);
 		/**
 		 * @brief Copies either paternal or maternal genomes to each newborn based on random value generated compared to the recombination rate. See @link EggsNeonates::recomb_rate @endlink
@@ -150,7 +150,10 @@ class EggsNeonates
 		 * 
 		 */
 		void mutate(thrust::device_vector<float> *&parents_fgenotype,thrust::device_vector<float> *&parents_mgenotype);
-		/// @brief @deprecated
+		/**
+		 * @brief Superseded by the @link GenotypePhenotypeMap::create_genotype_phenotype_map @endlink
+		 * @deprecated
+		 */
 		void prepare_genotype_phenotype_map();
 		/**
 		 * @brief Copies processed information back to the @c species object
@@ -160,25 +163,48 @@ class EggsNeonates
 	};
 
 // make sure there are no more kids than spaces available
+
+
+/**
+ * @struct adjust_kids_functor
+ * @brief Ensures that the number of kids in a subpopulation does not exceed the available capacity.
+ *
+ * This functor is designed to be used with Thrust algorithms. It adjusts the number of kids
+ * in a subpopulation to ensure that the total population (existing + new kids) does not exceed
+ * the carrying capacity of the subpopulation.
+ *
+ * The input is a tuple with the following elements:
+ * - `0`: Number of kids to be added to the subpopulation.
+ * - `1`: Current size of the subpopulation.
+ * - `2`: Carrying capacity of the subpopulation.
+ *
+ * If the sum of the current population and the number of kids exceeds the carrying capacity,
+ * the number of kids is reduced accordingly. If the subpopulation is already over capacity,
+ * the number of kids is set to zero.
+ */
 struct adjust_kids_functor
 	{
-	/*
-		Elements in the tuple.
-		----------------------
-		0: subpopulation kid size
-		1: subpopulation size already there
-		2: subpopulation carrying capacity
-	*/
+	
+	/**
+     * @brief Adjusts the number of kids to fit within the subpopulation's carrying capacity.
+     *
+     * @tparam tuple A Thrust tuple containing three elements:
+     *         - `0`: int& kids (modifiable)
+     *         - `1`: const int& current_population
+     *         - `2`: const int& capacity
+     *
+     * @param t The tuple containing the kids count, current population, and capacity.
+     */
 	template <typename tuple>
 	__host__ __device__
 	void operator()(tuple t) {
 			if (thrust::get<0>(t) + thrust::get<1>(t) > thrust::get<2>(t)) 
 			{
-			if (thrust::get<2>(t) - thrust::get<1>(t) >= 0 )
+				if (thrust::get<2>(t) - thrust::get<1>(t) >= 0 )
 					{
 					thrust::get<0>(t) = thrust::get<2>(t) - thrust::get<1>(t);
 					}
-			if (thrust::get<2>(t) - thrust::get<1>(t) < 0 ) // if too crowded, no kids.
+				if (thrust::get<2>(t) - thrust::get<1>(t) < 0 ) // if too crowded, no kids.
 					{
 					thrust::get<0>(t) = 0;
 					}
@@ -187,21 +213,49 @@ struct adjust_kids_functor
 	};
 
 
+/**
+ * @struct recombination_functor
+ * @brief Simulates genetic recombination between two parent genotypes.
+ *
+ * This functor is intended for use with Thrust algorithms. It models the recombination
+ * process by selecting a genotype from either the female or male parent based on a 
+ * recombination rate and a parity value.
+ *
+ * The functor uses a tuple with the following elements:
+ * - `0`: Index of the parent individual.
+ * - `1`: A random float value used to determine if recombination occurs.
+ * - `2`: Parity value (used to alternate between parents).
+ * - `3`: Output genotype value (to be set based on recombination).
+ *
+ * If the random number is less than the recombination rate, the parity is toggled.
+ * The genotype is then selected from the female or male parent based on the parity.
+ */
 struct recombination_functor
-	{
+{
 	float *fgenotype, *mgenotype;
 	float recomb_rate;
+
+	/**
+     * @brief Constructor to initialize genotype pointers and recombination rate.
+     * @param fgene Pointer to female genotype array.
+     * @param mgene Pointer to male genotype array.
+     * @param rate Recombination rate (probability).
+     */
 	recombination_functor(float *fgene, float *mgene, float rate) : fgenotype(fgene), mgenotype(mgene), recomb_rate(rate)
 	{};
 	
-	/*
-		Elements in the tuple.
-		----------------------
-		0: parent index
-		1: random number
-		2: parity
-		3: genotype
-	*/
+	
+	/**
+     * @brief Applies the recombination logic to a tuple of parent data.
+     *
+     * @tparam tuple A Thrust tuple containing:
+     *         - `0`: int parent_index
+     *         - `1`: float random_value
+     *         - `2`: int& parity (modifiable)
+     *         - `3`: float& genotype (modifiable)
+     *
+     * @param t The tuple containing parent index, random value, parity, and genotype.
+     */
 	template <typename tuple>
 	__host__ __device__
 	void operator()(tuple t) {
@@ -218,6 +272,5 @@ struct recombination_functor
 
 		float answer = thrust::get<3>(t);
 		}
-	};
-
+};
 #endif
