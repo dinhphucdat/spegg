@@ -21,7 +21,6 @@ Statistics::Statistics(int num_demes, const char *output_file_summary_statistics
 	number_of_demes = num_demes;
 	summary_statistics.open(output_file_summary_statistics);
 	histogram_file.open(output_file_histograms);
-
 	mean_phenotypes.resize(number_of_demes);
 	mean_genotypes.resize(number_of_demes);
 	max_phenotypes.resize(number_of_demes);

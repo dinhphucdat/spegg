@@ -4,6 +4,13 @@ cmake_minimum_required(VERSION 3.10)
 # Set the project name
 project(spegg LANGUAGES CXX CUDA)
 
+########### CONSIDER EDITTING THESE TWO VARIABLES! #################
+set(CURAND_DIR_CACHE /usr/local/cuda/lib64 CACHE PATH "Path to the installed curand library")
+set(CUDA_DIR_CACHE /usr/local/cuda/lib64 CACHE PATH "Path to the installed cuda library")
+###################################################################
+set(CURAND_DIR ${CURAND_DIR_CACHE})
+set(CUDA_DIR ${CUDA_DIR_CACHE})
+
 # Find CUDA package
 find_package(CUDA REQUIRED)
 
@@ -17,14 +24,14 @@ set(CMAKE_C_COMPILER "/usr/bin/gcc")
 set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 
 # Set CUDA compiler explicitly
-# set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc")
+set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc")
 
 # Set cuda architecture and optimization flags
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -O3 --extended-lambda --expt-relaxed-constexpr")
 set(CMAKE_CUDA_ARCHITECTURES 61-real)
 
 # Set where all the output would go
-set(FULL_OUTPUT "${CMAKE_SOURCE_DIR}/objdir2")
+set(FULL_OUTPUT "${CMAKE_SOURCE_DIR}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${FULL_OUTPUT}")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${FULL_OUTPUT}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${FULL_OUTPUT}/..")
@@ -80,6 +87,7 @@ add_library(genetic_deme_specific_data STATIC ${ADD_KIDS}/genetic_deme_specific_
 # add_library(prey_fluctuations SHARED ${PREY_VARIABLES}/prey_fluctuations.cu)
 # add_library(assortative_mating_parents_class SHARED ${ADD_KIDS}/assortative_mating_parents_class.cu)
 add_library(assortative_mating_neonates_class STATIC ${ADD_KIDS}/assortative_mating_neonates_class.cu)
+add_library(assortative_mating_parents_class STATIC ${ADD_KIDS}/assortative_mating_parents_class.cu)
 add_library(determine_mortality STATIC ${UPDATE}/determine_mortality.cu)
 add_library(MigrationFunctions STATIC ${MOVEMENT}/MigrationFunctions.cu)
 add_library(one_dim_two_dim STATIC ${UTIL}/one_dim_two_dim.cu)
@@ -98,7 +106,8 @@ add_library(species_specific_mate_sampling_rules STATIC ${ADD_KIDS}/species_spec
 set_target_properties(Simulation_Class inds inds_stochastic inds_stochastic_migratory environment mating_thrust_prob_table_demes 
     thrust_prob_table_demes thrust_prob_table histogram amplify reduce_by_key_with_zeroes Shuffle_by_Key random_variables_functions 
     statistics_class demographic_statistics_class deme_specific_data_class parents_class neonates_class genotype_phenotype_map_parameters 
-    genetic_deme_specific_data determine_mortality MigrationFunctions one_dim_two_dim remove_duplicate_pairs which_function gather_values_by_deme 
+    genetic_deme_specific_data assortative_mating_neonates_class assortative_mating_parents_class determine_mortality MigrationFunctions 
+    one_dim_two_dim remove_duplicate_pairs which_function gather_values_by_deme 
     Sampling_Input Sampling_Event Sample_without_Replacement_1Pass Sample_without_Replacement_byDeme Sample_With_Replacement 
     Sample_without_Replacement_Test species_specific_mate_sampling_rules PROPERTIES 
     CUDA_SEPARABLE_COMPILATION ON)
@@ -106,8 +115,8 @@ set_target_properties(Simulation_Class inds inds_stochastic inds_stochastic_migr
 # Resolve external libraries
 # Find the libraries
 find_library(LIBCONFIG_LIB config++ REQUIRED)
-find_library(CURAND_LIB curand REQUIRED HINTS /usr/local/cuda/lib64)
-find_library(CUDA_LIB cuda REQUIRED HINTS /usr/local/cuda/lib64)
+find_library(CURAND_LIB curand REQUIRED HINTS ${CURAND_DIR})
+find_library(CUDA_LIB cuda REQUIRED HINTS ${CUDA_DIR})
 find_library(RT_LIB rt REQUIRED)
 
 # Store the list of external libraries in a variable
@@ -148,16 +157,18 @@ target_link_libraries(remove_duplicate_pairs ${EXTERNAL_LIBS})
 target_link_libraries(which_function ${EXTERNAL_LIBS})
 target_link_libraries(gather_values_by_deme ${EXTERNAL_LIBS})
 target_link_libraries(Sampling_Input ${EXTERNAL_LIBS})
+target_link_libraries(Sample_without_Replacement_1Pass ${EXTERNAL_LIBS} Sampling_Event)
+target_link_libraries(Sample_without_Replacement_byDeme ${EXTERNAL_LIBS} Sampling_Event)
+target_link_libraries(Sample_With_Replacement ${EXTERNAL_LIBS} Sampling_Event)
+target_link_libraries(Sample_without_Replacement_Test ${EXTERNAL_LIBS} Sampling_Event)
+target_link_libraries(species_specific_mate_sampling_rules ${EXTERNAL_LIBS} Sampling_Event)
 target_link_libraries(Sampling_Event ${EXTERNAL_LIBS})
-target_link_libraries(Sample_without_Replacement_1Pass ${EXTERNAL_LIBS})
-target_link_libraries(Sample_without_Replacement_byDeme ${EXTERNAL_LIBS})
-target_link_libraries(Sample_With_Replacement ${EXTERNAL_LIBS})
-target_link_libraries(Sample_without_Replacement_Test ${EXTERNAL_LIBS})
-target_link_libraries(species_specific_mate_sampling_rules ${EXTERNAL_LIBS})
-
+target_link_libraries(assortative_mating_parents_class ${EXTERNAL_LIBS} Sampling_Input 
+                                                Sampling_Event)
+target_link_libraries(assortative_mating_neonates_class ${EXTERNAL_LIBS} assortative_mating_parents_class)
 # Set the appropriate compile options for CUDA files
 # set_target_properties(a.out PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
-
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR})
 # Add a custom clean target to remove the object directory and executable
 # By renaming the target to `clean_custom`, you avoid conflicting with the reserved `clean` target.
 add_custom_target(clean_obj

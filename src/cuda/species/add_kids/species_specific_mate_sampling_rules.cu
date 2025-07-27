@@ -12,7 +12,7 @@
 
 void SamplingInput_Mating::determine_mate_sampling_scheme(int species_ID)
 	{
-	std::cout << "Try to find the sampling scheme" << std::endl;
+	// std::cout << "Try to find the sampling scheme" << std::endl;
 	const char *filename = "deme_config.txt";
 
 	Config cfg;
@@ -40,7 +40,7 @@ void SamplingInput_Mating::determine_mate_sampling_scheme(int species_ID)
 
 	bool does_sampling_scheme_exist = species_specification[species_ID].lookupValue("MATE_SAMPLING_SCHEME", sampling_scheme);
 
-	std::cout << "sampling scheme is: " << sampling_scheme << std::endl;
+	// std::cout << "sampling scheme is: " << sampling_scheme << std::endl;
 
 	if (!does_sampling_scheme_exist)
 		{

@@ -9,7 +9,8 @@ float recomb_array_assort[NLOCI] = {0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.
 // TODO: The parent class has up to 2 constructors, but here I only see one which is a longer parameter list one. So think in order to 
 // ensure that we can initialize the parent class properly, we need to create another two-parameter constructor as the parent class did 
 // which takes in the species object and kids_per_mom vector!
-Assortative_mating_neonates::Assortative_mating_neonates(inds_stochastic* species, thrust::device_vector<int> &kids_per_mom) : EggsNeonates(species, kids_per_mom) 
+Assortative_mating_neonates::Assortative_mating_neonates(inds_stochastic* species, thrust::device_vector<int> kids_per_mom) : 
+	EggsNeonates(species, kids_per_mom) 
 	{
 	// how many subpopulations depends on how many demes there are
 	
@@ -35,30 +36,32 @@ Assortative_mating_neonates::Assortative_mating_neonates(inds_stochastic* specie
                               pairs_per_deme.begin());
 		
 	}
-
-void Assortative_mating_neonates::inherit_genotypes_by_pair(thrust::device_vector<float> &probability_pair_becomes_parents,
-				thrust::device_vector<int> &fathers_list,
-				thrust::device_vector<int> &mothers_list,
-				thrust::device_vector<float> *&fgenotype,
-				thrust::device_vector<float> *&mgenotype)
+// TODO: remove these two args and replace with inds's
+void Assortative_mating_neonates::inherit_genotypes_by_pair(
+		thrust::device_vector<float> probability_pair_becomes_parents, 
+		thrust::device_vector<int> fathers_in_pairs, 
+		thrust::device_vector<int> mothers_in_pairs, 
+		thrust::device_vector<int> pairs_demes
+	)
 	{
-
 	mothers_chosen.resize(Total_Number_of_Neonates);
 	fathers_chosen.resize(Total_Number_of_Neonates);
 
-	get_mating_pair(probability_pair_becomes_parents, fathers_list, mothers_list);
+	get_mating_pair(probability_pair_becomes_parents, fathers_in_pairs, mothers_in_pairs, pairs_demes);
 
-	get_maternally_derived_genotype_deterministic(mothers_chosen, mgenotype, fgenotype);
+	get_maternally_derived_genotype_deterministic(species->mgenotype, species->fgenotype);
 
-	get_paternally_derived_genotype_deterministic(fathers_chosen, mgenotype, fgenotype);
+	get_paternally_derived_genotype_deterministic(species->mgenotype, species->fgenotype);
 
-	mutate(mgenotype, fgenotype);
+	mutate(species->mgenotype, species->fgenotype);
 	}
 
-void Assortative_mating_neonates::get_mating_pair(thrust::device_vector<float> &probability_pair_becomes_parents,
-						   thrust::device_vector<int> &fathers_list,
-						   thrust::device_vector<int> &mothers_list
-						  )
+void Assortative_mating_neonates::get_mating_pair(
+	thrust::device_vector<float> probability_pair_becomes_parents, 
+	thrust::device_vector<int> fathers_in_pairs, 
+	thrust::device_vector<int> mothers_in_pairs, 
+	thrust::device_vector<int> pairs_demes
+)
 	{
 	mating_ThrustProbTable_demes at;
 	thrust::device_vector<int> pair_index(Total_Number_of_Neonates);
@@ -68,27 +71,35 @@ void Assortative_mating_neonates::get_mating_pair(thrust::device_vector<float> &
 	Feed reproductive probablity into the setup of the alias table.
 	Draw from the alias table to determine mothers.
 */	
-	at.setup(probability_pair_becomes_parents.begin(), probability_pair_becomes_parents.begin() + previous_pop_size);
+	at.setup(probability_pair_becomes_parents.begin(), probability_pair_becomes_parents.end());
 
 	curandGenerateUniform(this->gen, rand_ptr, Total_Number_of_Neonates);
+	
+	// this is to determine how many pairs each deme has
+	thrust::device_vector<int> cumul_pair_deme_size(Num_Subpopulations);
+	thrust::counting_iterator<int> deme_counter(0);
+	thrust::upper_bound(pairs_demes.begin(), pairs_demes.end(), 
+						deme_counter, deme_counter + Num_Subpopulations, cumul_pair_deme_size.begin());
+	thrust::device_vector<int> pair_deme_size(Num_Subpopulations);
+	thrust::adjacent_difference(cumul_pair_deme_size.begin(), cumul_pair_deme_size.end(), pair_deme_size.begin());
  
-	at.determine_key_offsets( Num_Subpopulations, species->deme_sizes );
+	at.determine_key_offsets( Num_Subpopulations, pair_deme_size );
  
 	at.adjust_randoms(rand.begin(), rand.end(), kids_deme.begin(), kids_deme.end());
  
 	at.draw(rand.begin(), rand.end(), pair_index.begin());
 
- 		
-	// thrust::gather(pair_index.begin(), pair_index.end(), fathers_list.begin(), fathers_chosen.begin());
+
+	thrust::gather(pair_index.begin(), pair_index.end(), fathers_in_pairs.begin(), fathers_chosen.begin());
 
  
-	thrust::gather(pair_index.begin(), pair_index.end(), species->deme.begin(), mothers_chosen.begin());
+	thrust::gather(pair_index.begin(), pair_index.end(), mothers_in_pairs.begin(), mothers_chosen.begin());
 
 	}
 
 /* use the functions blah_blah_deterministic() if the parents have already been chosen and you just need to copy genotypes */
 	
-void Assortative_mating_neonates::get_maternally_derived_genotype_deterministic(thrust::device_vector<int> &mother_index,
+void Assortative_mating_neonates::get_maternally_derived_genotype_deterministic(
 					     thrust::device_vector<float> *&mgenotype,
 					     thrust::device_vector<float> *&fgenotype)
 	{
@@ -102,11 +113,11 @@ void Assortative_mating_neonates::get_maternally_derived_genotype_deterministic(
 	for (int i = 0 ; i < nloci ; i++) 
 		{
 		curandGenerateUniform(this->gen, rand_ptr, Total_Number_of_Neonates);
-        recombine(rand, mother_index, parity, fgenotype, mgenotype, fgenotype[i], i);
+        recombine(rand, mothers_chosen, parity, fgenotype, mgenotype, fgenotype[i], i);
 		}
 	}
 
-void Assortative_mating_neonates::get_paternally_derived_genotype_deterministic(thrust::device_vector<int> &father_index,
+void Assortative_mating_neonates::get_paternally_derived_genotype_deterministic(
 					     thrust::device_vector<float> *&mgenotype,
 					     thrust::device_vector<float> *&fgenotype)
 	{
@@ -122,7 +133,7 @@ void Assortative_mating_neonates::get_paternally_derived_genotype_deterministic(
 	for (int i = 0 ; i < nloci ; i++) 
 		{
 		curandGenerateUniform(this->gen, rand_ptr,Total_Number_of_Neonates);
-		recombine(rand, father_index, parity, fgenotype, mgenotype, mgenotype[i], i);
+		recombine(rand, fathers_chosen, parity, fgenotype, mgenotype, mgenotype[i], i);
 		}
 	}
 

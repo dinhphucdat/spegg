@@ -21,11 +21,12 @@ Assortative_mating_parents::Assortative_mating_parents(inds_stochastic *species)
 	determine_female_parent_eligibility();
 	determine_male_parent_eligibility();
 
-	female_parents.resize(size);
-	male_parents.resize(size);	
+	//TODO: These 4 lines are actually so expensive while not having to do much for the method at all
+	// female_parents.resize(size);
+	// male_parents.resize(size);	
 
-	thrust::fill(female_parents.begin(), female_parents.end(), -1);
-	thrust::fill(male_parents.begin(), male_parents.end(), -1);
+	// thrust::fill(female_parents.begin(), female_parents.end(), -1);
+	// thrust::fill(male_parents.begin(), male_parents.end(), -1);
 
 	reduce_by_key_with_zeros(deme, will_reproduceM, reproductive_males_per_deme, size, Num_Demes); 
 	reduce_by_key_with_zeros(deme, will_reproduceF, reproductive_females_per_deme, size, Num_Demes);
@@ -41,6 +42,11 @@ Assortative_mating_parents::Assortative_mating_parents(inds_stochastic *species)
 	which_equal_to(will_reproduceM, male_parents, 1);
 
 	// TODO: Add an error handler that will report an error if assortative_mating_phenotyope_index is absent at this stage
+
+	if (species->demeParameters->species_specific_values.find("ASSORTATIVE_MATING_PHENOTYPE") == species->demeParameters->species_specific_values.end()) {
+		std::cerr << "[Error] Missing parameter: ASSORTATIVE_MATING_PHENOTYPE in deme_config.txt" << std::endl;
+		std::exit(1);
+	}
 	ASSORTATIVE_MATING_PHENOTYPE_INDEX = (int) species->demeParameters->species_specific_values["ASSORTATIVE_MATING_PHENOTYPE"];
 
 	assortative_mating_trait.resize(size);
@@ -50,27 +56,31 @@ Assortative_mating_parents::Assortative_mating_parents(inds_stochastic *species)
 	mate_sampling_scheme = 0;
 	}
 
-void Assortative_mating_parents::determine_parent_pair_probability(thrust::device_vector<float> *&phenotypes)
+void Assortative_mating_parents::determine_parent_pair_probability()
 	{
-
 	Generate_Parents_List();
-/*
 	Generate_Females_List();
 	Generate_Males_List();
-*/
 	// Get the deme in which the pair is found
 	pair_demes.resize(females_list.size());
 	thrust::gather(females_list.begin(), females_list.end(), deme.begin(), pair_demes.begin());
 	parental_pair_probability.resize(females_list.size());
 
 	float *assortative_mating_trait_ptr = raw_pointer_cast(&assortative_mating_trait[0]);
-	float *assortative_mating_value_ptr = raw_pointer_cast(demeParameters->get_vector_ptr("assortative_mating_value"));
+	// here, we should rename it as "assortative_mating_importance" rather than "value". 
+	// Smaller "importance" leads to more needs of closer phenotype values to be able to mate.
+	float *assortative_mating_importance_ptr = raw_pointer_cast(demeParameters->get_vector_ptr("assortative_mating_importance"));
+	float *female_reproduction_scaling_ptr = raw_pointer_cast(demeParameters->get_vector_ptr("female_reproduction_scaling"));
 	
-	pairwise_mating_probability probability_pairs_mate(assortative_mating_trait_ptr, assortative_mating_value_ptr);
+	pairwise_mating_probability probability_pairs_mate(
+		assortative_mating_trait_ptr, 
+		assortative_mating_importance_ptr, 
+		female_reproduction_scaling_ptr
+	);
 
 	thrust::device_vector<float> female_sizes(females_list.size());
-	thrust::gather(females_list.begin(), females_list.end(), phenotypes[1].begin(), female_sizes.begin());
-
+	// thrust::gather(females_list.begin(), females_list.end(), phenotypes[1].begin(), female_sizes.begin()); --> phenotypes index shouldn't be 1
+	thrust::gather(females_list.begin(), females_list.end(), probability_individual_becomes_female_parent.begin(), female_sizes.begin());
 	thrust::for_each(thrust::make_zip_iterator(thrust::make_tuple(females_list.begin(), males_list.begin(), pair_demes.begin(), female_sizes.begin(), parental_pair_probability.begin())),
 			 thrust::make_zip_iterator(thrust::make_tuple(females_list.end(), males_list.end(), pair_demes.end(), female_sizes.end(), parental_pair_probability.end())),
 			 probability_pairs_mate);
@@ -123,6 +133,7 @@ void Assortative_mating_parents::Generate_Females_List()
 void Assortative_mating_parents::Generate_Males_List()
 	{
 	/* now do males. In essence, this is the R operation rep(male_parents, reproductive_females_per_deme) */
+	males_list.resize(females_list.size());
 	thrust::device_vector<int> females_deme(males_list.size());
 	thrust::gather(females_list.begin(), females_list.end(), deme.begin(), females_deme.begin());
 
@@ -131,8 +142,6 @@ void Assortative_mating_parents::Generate_Males_List()
 	
 	thrust::device_vector<int> indices(females_list.size());
 	thrust::sequence(indices.begin(), indices.end(), 0);
-	
-	males_list.resize(females_list.size());
 	
 	int *cumulative_males_by_deme_ptr = raw_pointer_cast(&cumulative_males_by_deme[0]);
 	int *males_per_deme_ptr = raw_pointer_cast(&reproductive_males_per_deme[0]);

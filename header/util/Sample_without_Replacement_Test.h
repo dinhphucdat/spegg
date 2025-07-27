@@ -15,7 +15,7 @@ class Sample_without_Replacement_Test : public SamplingEvent
 
 			number_of_individuals_subject_to_sampling = sampling_input->list_of_individuals_potentially_subject_to_sampling.size();
 			}
-		void sample();
+		void sample() override;
 
 	protected:
 		int number_of_individuals_subject_to_sampling;

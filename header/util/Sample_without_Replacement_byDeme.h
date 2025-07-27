@@ -28,7 +28,7 @@ class Sample_without_Replacement_byDeme : public SamplingEvent
 			number_of_sampling_individuals_by_deme.resize(sampling_input->Num_Demes);
 			cumulative_sampling_individuals_by_deme.resize(sampling_input->Num_Demes);
 			}
-		void sample();
+		void sample() override;
 		void setup_demes(thrust::device_vector<int> &demes_of_individuals_sampled);
 
 	protected:

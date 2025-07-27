@@ -12,9 +12,9 @@ class Assortative_mating_parents : public Parents
 	public:
 		Assortative_mating_parents(inds_stochastic *species);
 
-		void determine_parent_pair_probability(thrust::device_vector<float> *&phenotypes);
+		void determine_parent_pair_probability();
 		thrust::device_vector<float> parental_pair_probability;
-
+		/// @brief @deprecated
 		void draw_parents();
 
 		/* female_parents, male_parents differs from females_list, males_list. In the assortative mating context, female_parents, male_parents merely stores the indices of individuals that can potentially be parents, while females_list,males_list stores the potential sampling space (ie., has duplicates) */
@@ -69,8 +69,11 @@ struct assign_males
 struct pairwise_mating_probability
 	{
 	float *assortative_mating_trait;
-	float *assortative_mating_value;
-	pairwise_mating_probability(float *assort_mating_trait, float *assort_mating_value) : assortative_mating_trait (assort_mating_trait), assortative_mating_value (assort_mating_value)
+	float *assortative_mating_importance;
+	float *female_reproduction_scaling;
+	pairwise_mating_probability(float *assort_mating_trait, float *assort_mating_importance, float* female_reproduction_scaling) : 
+		assortative_mating_trait (assort_mating_trait), assortative_mating_importance (assort_mating_importance), 
+		female_reproduction_scaling(female_reproduction_scaling)
 	{};
 
 	/*
@@ -91,11 +94,25 @@ struct pairwise_mating_probability
 		female_assortative_mating_trait = assortative_mating_trait[thrust::get<0>(t)];
 		male_assortative_mating_trait = assortative_mating_trait[thrust::get<1>(t)];
 
-		float importance_of_assortative_mating = assortative_mating_value[thrust::get<2>(t)];
+		int current_deme = thrust::get<2>(t);
+		float importance_of_assortative_mating = assortative_mating_importance[current_deme];
+		float female_reproduction_scaling_deme = female_reproduction_scaling[current_deme];
+		if (female_reproduction_scaling_deme == 0.0f)
+		{
+			printf("[Error]: female_reproduction_scaling at deme %d cannot be 0\n", current_deme);
+		}
+		assert(female_reproduction_scaling_deme != 0.0f);
 
 		/* the relative probability that male thrust::get<1>(t) mates with female thrust::get<0>(t) is just the inverse of the difference between their assortative mating traits (i.e., the further these values are the less likely they are to mate) */
-
-		thrust::get<4>(t) = exp(-pow(female_assortative_mating_trait - male_assortative_mating_trait,2)/ importance_of_assortative_mating) * thrust::get<3>(t);
+		// Change: add 1.0f in case the phenotypes are too extreme but the resources are rare too so they can also 
+		// get some small probability to mate.
+		thrust::get<4>(t) = (
+								female_reproduction_scaling_deme + 
+								exp(
+									-pow(female_assortative_mating_trait - male_assortative_mating_trait,2) * 
+									importance_of_assortative_mating
+								)
+							) * thrust::get<3>(t);
 		}
 	};
 

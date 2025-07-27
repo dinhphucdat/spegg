@@ -26,7 +26,7 @@ class DemeSettings
 		std::map<std::string, float> species_specific_values;
 
 		DemeGeneticsSettings *GeneticArchitecture;
-
+		
 		thrust::device_vector<float> *deme_specific_recombination_rates;
 
 		thrust::device_ptr<float> get_vector_ptr(const char *parameter_name);

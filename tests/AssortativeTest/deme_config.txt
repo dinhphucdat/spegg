@@ -1,15 +1,20 @@
 number_of_demes = 4
 species_data = (
-    {
-        number_of_species_specific_values = 3
-        species_specific_values_names = ["FECUNDITY_PHENOTYPE_INDEX","MORTALITY_PHENOTYPE_INDEX", "WING_COLOR_INDEX"]
-
+    {#species0
+        number_of_species_specific_values = 5
+        species_specific_values_names = ["FECUNDITY_PHENOTYPE_INDEX","MORTALITY_PHENOTYPE_INDEX", "WING_COLOR_INDEX", "ASSORTATIVE_MATING_PHENOTYPE", "mating_scheme"]
         FECUNDITY_PHENOTYPE_INDEX = 0.0
         MORTALITY_PHENOTYPE_INDEX = 1.0
         WING_COLOR_INDEX = 2.0
+        ASSORTATIVE_MATING_PHENOTYPE = 2.0
+        #fixed sampling instead of poisson sampling
+        mating_scheme = 1.0
 
-        number_of_parameters = 4
-        parameter_names = ["M_reproductive_advantage", "F_reproductive_advantage","TARGET_WING_COLOR","WING_COLOR_DECAY"]
+        # needed for sampling classes
+        MATE_SAMPLING_SCHEME = "SAMPLE_WITH_REPLACEMENT"
+
+        number_of_parameters = 7
+        parameter_names = ["M_reproductive_advantage", "F_reproductive_advantage","TARGET_WING_COLOR","WING_COLOR_DECAY", "assortative_mating_importance", "mean_number_of_others_sampled", "female_reproduction_scaling"]
 
         demes_specifications = (
                                         {#deme0
@@ -17,24 +22,36 @@ species_data = (
                                         F_reproductive_advantage = 1.0
                                         TARGET_WING_COLOR = 0.808080
                                         WING_COLOR_DECAY = 0.3
+                                        assortative_mating_importance = 999999.0
+                                        mean_number_of_others_sampled = 0
+                                        female_reproduction_scaling = 0.2
                                         },
                                         {#deme1
                                         M_reproductive_advantage = 1.0
                                         F_reproductive_advantage = 1.0
                                         TARGET_WING_COLOR = 0.809120
                                         WING_COLOR_DECAY = 0.2
+                                        assortative_mating_importance = 999999.0
+                                        mean_number_of_others_sampled = 0
+                                        female_reproduction_scaling = 0.2
                                         },
                                         {#deme3
                                         M_reproductive_advantage = 1.0
                                         F_reproductive_advantage = 1.0
                                         TARGET_WING_COLOR = 0.809120
                                         WING_COLOR_DECAY = 0.1
+                                        assortative_mating_importance = 999999.0
+                                        mean_number_of_others_sampled = 0
+                                        female_reproduction_scaling = 0.2
                                         },
                                         {#deme3
                                         M_reproductive_advantage = 1.0
                                         F_reproductive_advantage = 1.0
                                         TARGET_WING_COLOR = 0.809120
                                         WING_COLOR_DECAY = 0.1
+                                        assortative_mating_importance = 999999.0
+                                        mean_number_of_others_sampled = 0
+                                        female_reproduction_scaling = 0.2
                                         }
                                       )         
     }

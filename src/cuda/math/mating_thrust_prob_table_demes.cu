@@ -33,12 +33,12 @@ struct adjust_randoms_functor
 	adjust_randoms_functor(float *pop_range) : popRanges_in_cumulative(pop_range)
 	{};
 	
-	/*
-		Elements in the tuple.
-		----------------------
-		0: the kid's random number
-		1: the kid's population
-	*/
+	//
+	//	Elements in the tuple.
+	//	----------------------
+	//	0: the kid's random number
+	//	1: the kid's population
+	//
 	template <typename tuple>
 	__host__ __device__
 	void operator()(tuple t) {
@@ -58,7 +58,6 @@ struct adjust_randoms_functor
 				}
 		}
 	};
-
 
 
 struct adjust_randoms_functor_double

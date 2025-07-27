@@ -14,7 +14,7 @@ class Sample_With_Replacement : public SamplingEvent
 			this->gen = gen;
 			}
 	
-	void sample();
+	void sample() override;
 	};
 
 #endif

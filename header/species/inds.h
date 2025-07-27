@@ -7,16 +7,24 @@
 
 #include <species/deme_specific_data_class.h>
 #include <environ/environment.h>
-
+/*!
+ *
+ * A base class for storing the individuals belonging to a specific species, and performing 
+ * three operations that are common to all species: removing the dead individuals (which is not 
+ * implemented as a stream compaction for performanc reasons), sorting individuals according to 
+ * their deme, and writing the output to a CSV file stored on the hard drive. The methods and 
+ * data structures found in this class are those which apply to all species sPEGG can simulate.
+ *
+ * The basic philosophy behind inds is that the collection of individuals simulated for each species 
+ * can be thought of as an N x M matrix, with N representing the number of individuals and M representing 
+ * the number of attributes of these individuals (e.g., their genotypes, their ID, their demes, whether 
+ * they are dead or alive, etc...). (MOVE TO QUICKSTART) By convention, every individual data point that 
+ * is not a genotype, an ID, whether they are dead or alive, their sex, their age, and the IDs of their 
+ * parents is designated as a "phenotype".
+ *
+ */
 class inds
 	{
-	/*!
-	*
-	* A base class for storing the individuals belonging to a specific species, and performing three operations that are common to all species: removing the dead individuals (which is not implemented as a stream compaction for performanc reasons), sorting individuals according to their deme, and writing the output to a CSV file stored on the hard drive. The methods and data structures found in this class are those which apply to all species sPEGG can simulate.
-
-	The basic philosophy behind inds is that the collection of individuals simulated for each species can be thought of as an N x M matrix, with N representing the number of individuals and M representing the number of attributes of these individuals (e.g., their genotypes, their ID, their demes, whether they are dead or alive, etc...). (MOVE TO QUICKSTART) By convention, every individual data point that is not a genotype, an ID, whether they are dead or alive, their sex, their age, and the IDs of their parents is designated as a "phenotype".
-	*
-	*/
 	public:
 		friend class Statistics;
 		friend class Parents;
@@ -40,27 +48,89 @@ class inds
 		DemeSettings *demeParameters;
 
 		//Misc data ints
+		/**
+		 * size of the population of the species
+		 */
 		int size;
+		/**
+		 * maximum capacity of the population
+		 */
 		int maxsize;
+		/**
+		 * number of phenotypes defined in the species
+		 */
 		int nphen;
+		/**
+		 * number of loci (genes) in the species' genomes
+		 */
 		int nloci;
+		/**
+		 * next id pointing to the next individual, this is for iterative purpose
+		 */
 		int nextid;
+		/**
+		 * number of demes (clusters) into which the population is split
+		 */
 		int Num_Demes;
-
+		/**
+		 * ID for this species
+		 */
 		int species_ID;
 
 		//Data vectors
+		/**
+		 * list of IDs for all individuals
+		 */
 		thrust::device_vector<int> id;
+		/**
+		 * list of statuses
+		 */
 		thrust::device_vector<int> status;
+		/**
+		 * list of sexes
+		 */
 		thrust::device_vector<int> sex;
+		/**
+		 * list of ages
+		 */
 		thrust::device_vector<int> age;
+		/**
+		 * list of the deme number that each individual belongs to
+		 */
 		thrust::device_vector<int> deme;
+		/**
+		 * list of the sets of all alleles inherited from each individual's dad.
+		 * This is a list of lists, and is dynamically allocated.
+		 */
 		thrust::device_vector<float> *fgenotype;
+		/**
+		 * list of the sets of all alleles inherited from each individual's mom.
+		 * This is a list of lists, and is dynamically allocated.
+		 */
 		thrust::device_vector<float> *mgenotype;
+		/**
+		 * list of the sets of all phenotypes expressed in each individual.
+		 * This is a list of lists, and is dynamically allocated.
+		 */
 		thrust::device_vector<float> *phenotype;
+		/**
+		 * ids of each individual's mom
+		 */
 		thrust::device_vector<int> maternal_id;
+		/**
+		 * ids of each individual's dad
+		 */
 		thrust::device_vector<int> paternal_id;
+		/**
+		 * list of deme sizes. Demes are listed in order (ie. deme 0 will be at position 0, and so on) 
+		 * with their corresponding number of individuals in that deme.
+		 * 
+		 * @note This does not belong to the population matrix, only describes the state of each deme.
+		 */
 		thrust::device_vector<int> deme_sizes;
+		/**
+		 * list of maximum sizes for all demes. Also not belongs to the population matrix as @link deme_sizes deme_sizes @endlink.
+		 */
 		thrust::device_vector<int> max_deme_sizes;
 
 		// Calculate the number of individuals in each deme

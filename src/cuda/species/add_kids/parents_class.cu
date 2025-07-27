@@ -9,14 +9,17 @@ Parents::Parents(inds_stochastic *species)
 	this->phenotype = species->phenotype;
 
 	// Get relevant values from inds_stochastic object
-	size = species->size;
+	this->size = species->size;
+	// std::cout << "The value of size inherited from inds_stochastic species is: " << species->size << std::endl;
 	this->Num_Demes = species->Num_Demes;
 	gen = species->gen;
 	this->demeParameters = species->demeParameters;
-
+	// std::cout << "b" << std::endl;
+	// std::cout << "In parents class, size is " << size << std::endl;
 	deme.resize(size);
 	thrust::copy(species->deme.begin(), species->deme.begin() + size, deme.begin());
-	
+
+	// std::cout << "OK" << std::endl;	
 	sex.resize(size);
 	thrust::copy(species->sex.begin(), species->sex.begin() + size, sex.begin());
 

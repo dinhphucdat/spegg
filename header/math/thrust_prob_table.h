@@ -28,6 +28,7 @@ class ThrustProbTable
  		 * @param prob_end Iterator pointing to the end of the range of input probabilities.
 		 */
 		void setup(thrust::device_vector<float>::iterator prob_begin, thrust::device_vector<float>::iterator prob_end);
+
 		/**
 		 * @brief Maps uniformly distributed random numbers to cumulative probabilities.
 		 *

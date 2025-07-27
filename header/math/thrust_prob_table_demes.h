@@ -13,8 +13,8 @@
  */
 class ThrustProbTable_demes : public ThrustProbTable
 	{
-
 	public:
+		
 		/**
 		 * @brief Adjusts random numbers to fall within the correct intervals for each deme.
 		 *
@@ -47,7 +47,6 @@ class ThrustProbTable_demes : public ThrustProbTable
 		thrust::device_vector<int>::iterator deme_offsets_begin, thrust::device_vector<int>::iterator deme_offsets_end,
 		thrust::device_vector<int>::iterator inds_deme_begin, thrust::device_vector<int>::iterator inds_deme_end);
 
-		// @missing
 		void adjust_randoms_fixed_offsets(thrust::device_vector<float>::iterator uniform_begin, thrust::device_vector<float>::iterator uniform_end, thrust::device_vector<int>::iterator inds_deme_begin, thrust::device_vector<int>::iterator inds_deme_end);
 	};
 
@@ -74,8 +73,7 @@ class ThrustProbTable_demes_Double : public ThrustProbTableDouble
 		void adjust_randoms(thrust::device_vector<double>::iterator uniform_begin, thrust::device_vector<double>::iterator uniform_end,
 		thrust::device_vector<int>::iterator deme_offsets_begin, thrust::device_vector<int>::iterator deme_offsets_end,
 		thrust::device_vector<int>::iterator inds_deme_begin, thrust::device_vector<int>::iterator inds_deme_end);
-		
-		// @missing
+
 		void adjust_randoms_fixed_offsets(thrust::device_vector<double>::iterator uniform_begin, thrust::device_vector<double>::iterator uniform_end, thrust::device_vector<int>::iterator inds_deme_begin, thrust::device_vector<int>::iterator inds_deme_end);
 	};
 

@@ -13,7 +13,9 @@ void DemeSettings::specify_parameter_index()
 	for (int i=0; i < parameter_names.size(); i++)
 		parameter_index[parameter_names[i]] = i;
 	}
-
+/**
+ * Helper function
+ */
 void DemeSettings::read_in_parameters(const char *filename, int species_ID)
 	{
 	/* 
@@ -39,7 +41,7 @@ void DemeSettings::read_in_parameters(const char *filename, int species_ID)
 		}
  	catch(const SettingNotFoundException &nfex)
 		{
-		std::cerr << "No 'number_of_demes' setting in configuration file." << std::endl;
+		std::cerr << "No 'number_of_demes' setting in configuration file. Please check if this attribute exists or if you mispelled it." << std::endl;
 		}
 
 	const Setting& root = cfg.getRoot();
@@ -127,14 +129,28 @@ void DemeSettings::read_in_parameters(const char *filename, int species_ID)
 		}
 	else
 		{
-		std::cerr << "Warning: No 'deme_specifications' setting in configuration file." << std::endl;
+		std::cerr << "Warning: No 'deme_specifications' setting in configuration file. Check if it is not there or mispelled." << std::endl;
 		}
 	}
-
+/**
+ * Returns the pointer to the vector of values of one specific @c parameter_name from deme 1 to deme n.
+ * @param parameter_name the name of a specific deme-wise paramter.
+ * @return the pointer to the vector of values
+ */
 thrust::device_ptr<float> DemeSettings::get_vector_ptr(const char *parameter_name)
+{
+	// deme_wide_parameters looks like: 
+	// [[para1 - deme1, para1 - deme2, ..., para1 - demeN], [para2 - deme1, ..., para2 - demeN], ...]
+	auto it = parameter_index.find(parameter_name);
+	if (it != parameter_index.end())
+		return(&deme_wide_parameters[it->second][0]);
+	else
 	{
-	return(&deme_wide_parameters[parameter_index[parameter_name]][0]);
+		std::cerr << "[Error]: Key \"" << parameter_name << "\" is not found in the " 
+			<< "\"deme_specifications\" section in your deme_config.txt - Aborted" << std::endl;
+		throw std::invalid_argument(std::string("Key not found: ") + parameter_name);
 	}
+}
 
 int DemeSettings::check_number_of_demes()
 	{

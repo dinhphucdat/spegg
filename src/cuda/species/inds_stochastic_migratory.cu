@@ -1,13 +1,14 @@
 #include <species/inds_stochastic_migratory.h>
 #include <util/file_checker.h>
 
+/**
+ * <p>This constructor essentially initializes the <a href="">migration matrix</a></p>
+ * 
+ * <p>The object of this class expects a migration file required to be named as @c Migration_Probabilities.txt , 
+ * with each individual's migration rate in each line. <strong>See more the guide</strong> on @c Migration_Probabilities.txt .</p>
+ */
 inds_stochastic_migratory::inds_stochastic_migratory(int size_val, int maxsize_val, int seed_val, int ndemes,  int species_ID_val) : inds_stochastic(size_val, maxsize_val, seed_val, ndemes, species_ID_val)
 	{
-/*
-*
-* Initialize the migration matrix. 
-*
-*/ 
 	// specify the migration rate from subpopulation i to subpoulation j
 	thrust::device_vector<float> migration_probability(ndemes*ndemes);
 

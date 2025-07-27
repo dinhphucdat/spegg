@@ -14,7 +14,7 @@ class Sample_without_Replacement_1Pass : public SamplingEvent
 			this->gen = gen;
 			}
 	
-	void sample();
+	void sample() override;
 	};
 
 #endif
