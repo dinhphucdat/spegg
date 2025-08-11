@@ -135,7 +135,7 @@ CMAKELISTS = {
     [
         ("if", ["NOT", "SPEGG_ROOT"]),
         ("->", [
-            ("set", ["SPEGG_ROOT", SPEGG_ROOT]), 
+            ("set", ["SPEGG_ROOT", os.path.abspath(SPEGG_ROOT)]), 
             ("list", ["APPEND", "CMAKE_MODULE_PATH", r"${SPEGG_ROOT}", True])
         ]),
         ("endif", [])
