@@ -30,6 +30,7 @@ if (SPEGG_ROOT_DIR)
     )
     # Find the compiled libraries directory
     set(SPEGG_LIB_DIR ${SPEGG_ROOT_DIR}/lib)
+    set(CURAND_DIR "/usr/local/cuda/lib64")
     # Find all static libraries
     file(GLOB SPEGG_LIBRARIES "${SPEGG_LIB_DIR}/*.a")
     # Check if all binary files are found

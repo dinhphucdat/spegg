@@ -11,7 +11,11 @@ if (NOT SPEGG_ROOT)
 endif()
 
 if (NOT GTEST_ROOT)
-    set(GTEST_ROOT "~/googletest")
+    set(GTEST_ROOT "$ENV{HOME}/googletest")
+    set(GTEST_LIBRARY "${GTEST_ROOT}/googletest/lib/libgtest.a")
+    set(GMOCK_LIBRARY "${GTEST_ROOT}/googletest/lib/libgmock.a")
+    set(GTEST_INCLUDE_DIR "${GTEST_ROOT}/googletest/include/")
+    set(GTEST_MAIN_LIBRARY "${GTEST_ROOT}/googletest/lib/libgtest_main.a")
 endif()
 
 find_package(Threads REQUIRED)
@@ -36,7 +40,7 @@ set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -O3 --extended-lambda --expt-relaxed-constexpr")
 set(CMAKE_CUDA_ARCHITECTURES 61-real)
 
-include_directories(${GTEST_INCLUDE_DIRS})
+include_directories(${GTEST_INCLUDE_DIR})
 include_directories(${GTEST_ROOT}/googlemock/include)
 include_directories(${SPEGG_INCLUDE_DIRS})  # SPEGG headers
 # Add include directories for headers
@@ -58,7 +62,11 @@ add_executable(${PROJECT_NAME} ${CODEBASE_LIBS} GenPhenMapTest.h GenPhenMapTest.
 set_target_properties(${PROJECT_NAME} PROPERTIES 
     CUDA_SEPARABLE_COMPILATION ON)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE GTest::gmock GTest::GTest Threads::Threads SPEGG::spegg_codebase  
+target_link_libraries(${PROJECT_NAME} PRIVATE 
+    ${GTEST_LIBRARY}
+    ${GTEST_MAIN_LIBRARY}
+    ${GMOCK_LIBRARY}
+    Threads::Threads SPEGG::spegg_codebase  
     ${CODEBASE_LIBS}
     ${LIBCONFIG_LIB}
     ${CURAND_LIB}
