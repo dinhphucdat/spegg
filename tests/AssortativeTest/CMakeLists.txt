@@ -5,7 +5,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 # Set SPEGG location (like GTEST_ROOT)
 if (NOT SPEGG_ROOT)
-    set(SPEGG_ROOT "~/Documents/DatNewProject/spegg")
+    set(SPEGG_ROOT ../../)
     # Add custom module path
     list(APPEND CMAKE_MODULE_PATH "${SPEGG_ROOT}")
 endif()
