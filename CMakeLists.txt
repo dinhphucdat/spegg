@@ -28,7 +28,7 @@ set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc")
 
 # Set cuda architecture and optimization flags
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -O3 --extended-lambda --expt-relaxed-constexpr")
-set(CMAKE_CUDA_ARCHITECTURES 61-real)
+set(CMAKE_CUDA_ARCHITECTURES 50 61 70 75 80 86)
 
 # Set where all the output would go
 set(FULL_OUTPUT "${CMAKE_SOURCE_DIR}/lib")

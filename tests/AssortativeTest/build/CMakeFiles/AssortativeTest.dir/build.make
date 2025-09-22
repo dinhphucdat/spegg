@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/wormlab/datdinh_server/tests/AssortativeTest
+CMAKE_SOURCE_DIR = /home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/wormlab/datdinh_server/tests/AssortativeTest/build
+CMAKE_BINARY_DIR = /home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/AssortativeTest.dir/depend.make
@@ -72,8 +72,8 @@ include CMakeFiles/AssortativeTest.dir/flags.make
 CMakeFiles/AssortativeTest.dir/GenPhenMapTest.cu.o: CMakeFiles/AssortativeTest.dir/flags.make
 CMakeFiles/AssortativeTest.dir/GenPhenMapTest.cu.o: ../GenPhenMapTest.cu
 CMakeFiles/AssortativeTest.dir/GenPhenMapTest.cu.o: CMakeFiles/AssortativeTest.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wormlab/datdinh_server/tests/AssortativeTest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CUDA object CMakeFiles/AssortativeTest.dir/GenPhenMapTest.cu.o"
-	/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/AssortativeTest.dir/GenPhenMapTest.cu.o -MF CMakeFiles/AssortativeTest.dir/GenPhenMapTest.cu.o.d -x cu -dc /home/wormlab/datdinh_server/tests/AssortativeTest/GenPhenMapTest.cu -o CMakeFiles/AssortativeTest.dir/GenPhenMapTest.cu.o
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CUDA object CMakeFiles/AssortativeTest.dir/GenPhenMapTest.cu.o"
+	/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/AssortativeTest.dir/GenPhenMapTest.cu.o -MF CMakeFiles/AssortativeTest.dir/GenPhenMapTest.cu.o.d -x cu -dc /home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest/GenPhenMapTest.cu -o CMakeFiles/AssortativeTest.dir/GenPhenMapTest.cu.o
 
 CMakeFiles/AssortativeTest.dir/GenPhenMapTest.cu.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CUDA source to CMakeFiles/AssortativeTest.dir/GenPhenMapTest.cu.i"
@@ -86,8 +86,8 @@ CMakeFiles/AssortativeTest.dir/GenPhenMapTest.cu.s: cmake_force
 CMakeFiles/AssortativeTest.dir/AssortativeNeonatesTest.cu.o: CMakeFiles/AssortativeTest.dir/flags.make
 CMakeFiles/AssortativeTest.dir/AssortativeNeonatesTest.cu.o: ../AssortativeNeonatesTest.cu
 CMakeFiles/AssortativeTest.dir/AssortativeNeonatesTest.cu.o: CMakeFiles/AssortativeTest.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wormlab/datdinh_server/tests/AssortativeTest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CUDA object CMakeFiles/AssortativeTest.dir/AssortativeNeonatesTest.cu.o"
-	/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/AssortativeTest.dir/AssortativeNeonatesTest.cu.o -MF CMakeFiles/AssortativeTest.dir/AssortativeNeonatesTest.cu.o.d -x cu -dc /home/wormlab/datdinh_server/tests/AssortativeTest/AssortativeNeonatesTest.cu -o CMakeFiles/AssortativeTest.dir/AssortativeNeonatesTest.cu.o
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CUDA object CMakeFiles/AssortativeTest.dir/AssortativeNeonatesTest.cu.o"
+	/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/AssortativeTest.dir/AssortativeNeonatesTest.cu.o -MF CMakeFiles/AssortativeTest.dir/AssortativeNeonatesTest.cu.o.d -x cu -dc /home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest/AssortativeNeonatesTest.cu -o CMakeFiles/AssortativeTest.dir/AssortativeNeonatesTest.cu.o
 
 CMakeFiles/AssortativeTest.dir/AssortativeNeonatesTest.cu.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CUDA source to CMakeFiles/AssortativeTest.dir/AssortativeNeonatesTest.cu.i"
@@ -111,52 +111,52 @@ CMakeFiles/AssortativeTest.dir/cmake_device_link.o: CMakeFiles/AssortativeTest.d
 CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/googletest/googletest/lib/libgtest.a
 CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/googletest/googletest/lib/libgtest_main.a
 CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/googletest/googletest/lib/libgmock.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /usr/lib/x86_64-linux-gnu/libconfig++.so
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /usr/local/lib/libconfig++.so
 CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /usr/local/cuda/lib64/libcurand.so
 CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /usr/lib/x86_64-linux-gnu/libcuda.so
 CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /usr/lib/x86_64-linux-gnu/librt.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libMigrationFunctions.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libSample_With_Replacement.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libSample_without_Replacement_1Pass.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libSample_without_Replacement_Test.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libSample_without_Replacement_byDeme.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libSampling_Event.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libSampling_Input.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libShuffle_by_Key.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libSimulation_Class.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libamplify.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libassortative_mating_neonates_class.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libassortative_mating_parents_class.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libdeme_specific_data_class.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libdemographic_statistics_class.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libdetermine_mortality.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libenvironment.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libfootimer2.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libgather_values_by_deme.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libgenetic_deme_specific_data.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libgenotype_phenotype_map_parameters.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libhistogram.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libinds.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libinds_stochastic.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libinds_stochastic_migratory.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libmating_thrust_prob_table_demes.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libneonates_class.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libone_dim_two_dim.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libparents_class.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/librandom_variables_functions.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libreduce_by_key_with_zeroes.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libremove_duplicate_pairs.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libspecies_specific_mate_sampling_rules.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libstatistics_class.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libthrust_prob_table.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libthrust_prob_table_demes.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/datdinh_server/./lib/libwhich_function.a
-CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /usr/lib/x86_64-linux-gnu/libconfig++.so
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libMigrationFunctions.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libSample_With_Replacement.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libSample_without_Replacement_1Pass.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libSample_without_Replacement_Test.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libSample_without_Replacement_byDeme.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libSampling_Event.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libSampling_Input.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libShuffle_by_Key.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libSimulation_Class.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libamplify.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libassortative_mating_neonates_class.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libassortative_mating_parents_class.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libdeme_specific_data_class.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libdemographic_statistics_class.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libdetermine_mortality.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libenvironment.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libfootimer2.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libgather_values_by_deme.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libgenetic_deme_specific_data.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libgenotype_phenotype_map_parameters.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libhistogram.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libinds.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libinds_stochastic.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libinds_stochastic_migratory.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libmating_thrust_prob_table_demes.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libneonates_class.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libone_dim_two_dim.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libparents_class.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/librandom_variables_functions.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libreduce_by_key_with_zeroes.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libremove_duplicate_pairs.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libspecies_specific_mate_sampling_rules.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libstatistics_class.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libthrust_prob_table.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libthrust_prob_table_demes.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libwhich_function.a
+CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /usr/local/lib/libconfig++.so
 CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /usr/local/cuda/lib64/libcurand.so
 CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /usr/lib/x86_64-linux-gnu/libcuda.so
 CMakeFiles/AssortativeTest.dir/cmake_device_link.o: /usr/lib/x86_64-linux-gnu/librt.a
 CMakeFiles/AssortativeTest.dir/cmake_device_link.o: CMakeFiles/AssortativeTest.dir/dlink.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/wormlab/datdinh_server/tests/AssortativeTest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CUDA device code CMakeFiles/AssortativeTest.dir/cmake_device_link.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CUDA device code CMakeFiles/AssortativeTest.dir/cmake_device_link.o"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/AssortativeTest.dir/dlink.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -177,53 +177,53 @@ AssortativeTest_EXTERNAL_OBJECTS =
 ../AssortativeTest: /home/wormlab/googletest/googletest/lib/libgtest.a
 ../AssortativeTest: /home/wormlab/googletest/googletest/lib/libgtest_main.a
 ../AssortativeTest: /home/wormlab/googletest/googletest/lib/libgmock.a
-../AssortativeTest: /usr/lib/x86_64-linux-gnu/libconfig++.so
+../AssortativeTest: /usr/local/lib/libconfig++.so
 ../AssortativeTest: /usr/local/cuda/lib64/libcurand.so
 ../AssortativeTest: /usr/lib/x86_64-linux-gnu/libcuda.so
 ../AssortativeTest: /usr/lib/x86_64-linux-gnu/librt.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libMigrationFunctions.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libSample_With_Replacement.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libSample_without_Replacement_1Pass.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libSample_without_Replacement_Test.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libSample_without_Replacement_byDeme.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libSampling_Event.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libSampling_Input.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libShuffle_by_Key.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libSimulation_Class.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libamplify.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libassortative_mating_neonates_class.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libassortative_mating_parents_class.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libdeme_specific_data_class.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libdemographic_statistics_class.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libdetermine_mortality.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libenvironment.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libfootimer2.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libgather_values_by_deme.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libgenetic_deme_specific_data.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libgenotype_phenotype_map_parameters.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libhistogram.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libinds.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libinds_stochastic.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libinds_stochastic_migratory.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libmating_thrust_prob_table_demes.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libneonates_class.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libone_dim_two_dim.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libparents_class.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/librandom_variables_functions.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libreduce_by_key_with_zeroes.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libremove_duplicate_pairs.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libspecies_specific_mate_sampling_rules.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libstatistics_class.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libthrust_prob_table.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libthrust_prob_table_demes.a
-../AssortativeTest: /home/wormlab/datdinh_server/./lib/libwhich_function.a
-../AssortativeTest: /usr/lib/x86_64-linux-gnu/libconfig++.so
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libMigrationFunctions.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libSample_With_Replacement.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libSample_without_Replacement_1Pass.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libSample_without_Replacement_Test.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libSample_without_Replacement_byDeme.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libSampling_Event.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libSampling_Input.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libShuffle_by_Key.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libSimulation_Class.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libamplify.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libassortative_mating_neonates_class.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libassortative_mating_parents_class.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libdeme_specific_data_class.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libdemographic_statistics_class.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libdetermine_mortality.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libenvironment.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libfootimer2.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libgather_values_by_deme.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libgenetic_deme_specific_data.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libgenotype_phenotype_map_parameters.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libhistogram.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libinds.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libinds_stochastic.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libinds_stochastic_migratory.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libmating_thrust_prob_table_demes.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libneonates_class.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libone_dim_two_dim.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libparents_class.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/librandom_variables_functions.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libreduce_by_key_with_zeroes.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libremove_duplicate_pairs.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libspecies_specific_mate_sampling_rules.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libstatistics_class.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libthrust_prob_table.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libthrust_prob_table_demes.a
+../AssortativeTest: /home/wormlab/OneDrive/Personal_Project/spegg/./lib/libwhich_function.a
+../AssortativeTest: /usr/local/lib/libconfig++.so
 ../AssortativeTest: /usr/local/cuda/lib64/libcurand.so
 ../AssortativeTest: /usr/lib/x86_64-linux-gnu/libcuda.so
 ../AssortativeTest: /usr/lib/x86_64-linux-gnu/librt.a
 ../AssortativeTest: CMakeFiles/AssortativeTest.dir/cmake_device_link.o
 ../AssortativeTest: CMakeFiles/AssortativeTest.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/wormlab/datdinh_server/tests/AssortativeTest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CUDA executable ../AssortativeTest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CUDA executable ../AssortativeTest"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/AssortativeTest.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -235,6 +235,6 @@ CMakeFiles/AssortativeTest.dir/clean:
 .PHONY : CMakeFiles/AssortativeTest.dir/clean
 
 CMakeFiles/AssortativeTest.dir/depend:
-	cd /home/wormlab/datdinh_server/tests/AssortativeTest/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/wormlab/datdinh_server/tests/AssortativeTest /home/wormlab/datdinh_server/tests/AssortativeTest /home/wormlab/datdinh_server/tests/AssortativeTest/build /home/wormlab/datdinh_server/tests/AssortativeTest/build /home/wormlab/datdinh_server/tests/AssortativeTest/build/CMakeFiles/AssortativeTest.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest /home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest /home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest/build /home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest/build /home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest/build/CMakeFiles/AssortativeTest.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/AssortativeTest.dir/depend
 

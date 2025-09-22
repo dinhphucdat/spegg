@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/wormlab/datdinh_server/tests/AssortativeTest/AssortativeNeonatesTest.cu" "CMakeFiles/AssortativeTest.dir/AssortativeNeonatesTest.cu.o" "gcc" "CMakeFiles/AssortativeTest.dir/AssortativeNeonatesTest.cu.o.d"
-  "/home/wormlab/datdinh_server/tests/AssortativeTest/GenPhenMapTest.cu" "CMakeFiles/AssortativeTest.dir/GenPhenMapTest.cu.o" "gcc" "CMakeFiles/AssortativeTest.dir/GenPhenMapTest.cu.o.d"
+  "/home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest/AssortativeNeonatesTest.cu" "CMakeFiles/AssortativeTest.dir/AssortativeNeonatesTest.cu.o" "gcc" "CMakeFiles/AssortativeTest.dir/AssortativeNeonatesTest.cu.o.d"
+  "/home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest/GenPhenMapTest.cu" "CMakeFiles/AssortativeTest.dir/GenPhenMapTest.cu.o" "gcc" "CMakeFiles/AssortativeTest.dir/GenPhenMapTest.cu.o.d"
   )
 
 # Targets to which this target links.

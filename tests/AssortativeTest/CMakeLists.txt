@@ -5,7 +5,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 # Set SPEGG location (like GTEST_ROOT)
 if (NOT SPEGG_ROOT)
-    set(SPEGG_ROOT ../../)
+    set(SPEGG_ROOT ${CMAKE_SOURCE_DIR}/../..)
     # Add custom module path
     list(APPEND CMAKE_MODULE_PATH "${SPEGG_ROOT}")
 endif()
@@ -38,7 +38,7 @@ set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc")
 
 # Set cuda architecture and optimization flags
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -O3 --extended-lambda --expt-relaxed-constexpr")
-set(CMAKE_CUDA_ARCHITECTURES 61-real)
+set(CMAKE_CUDA_ARCHITECTURES 50 61 70 75 80 86)
 
 include_directories(${GTEST_INCLUDE_DIR})
 include_directories(${GTEST_ROOT}/googlemock/include)

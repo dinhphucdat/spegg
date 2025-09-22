@@ -5,40 +5,40 @@ species_data = (
 		number_of_species_specific_values = 2 
 		species_specific_values_names = ["FECUNDITY_PHENOTYPE_INDEX","MORTALITY_PHENOTYPE_INDEX"]
 
-		parameter_names = ["male_reproductive_skew","female_reproductive_skew"]
+		parameter_names = ["MALE_REPRODUCTIVE_SKEW","FEMALE_REPRODUCTIVE_SKEW"]
 
 		 FECUNDITY_PHENOTYPE_INDEX  =  0.000000 
 		 MORTALITY_PHENOTYPE_INDEX  =  1.000000 
 
 	demes_specifications = (
 		{#deme0
-		 male_reproductive_skew =  1.000000 
-		 female_reproductive_skew =  1.000000 
+		 MALE_REPRODUCTIVE_SKEW =  1.000000 
+		 FEMALE_REPRODUCTIVE_SKEW =  1.000000 
 		},
 
 		{#deme1
-		 male_reproductive_skew =  1.000000 
-		 female_reproductive_skew =  1.000000 
+		 MALE_REPRODUCTIVE_SKEW =  1.000000 
+		 FEMALE_REPRODUCTIVE_SKEW =  1.000000 
 		},
 
 		{#deme2
-		 male_reproductive_skew =  1.000000 
-		 female_reproductive_skew =  1.000000 
+		 MALE_REPRODUCTIVE_SKEW =  1.000000 
+		 FEMALE_REPRODUCTIVE_SKEW =  1.000000 
 		},
 
 		{#deme3
-		 male_reproductive_skew =  5.000000 
-		 female_reproductive_skew =  1.000000 
+		 MALE_REPRODUCTIVE_SKEW =  5.000000 
+		 FEMALE_REPRODUCTIVE_SKEW =  1.000000 
 		},
 
 		{#deme4
-		 male_reproductive_skew =  5.000000 
-		 female_reproductive_skew =  1.000000 
+		 MALE_REPRODUCTIVE_SKEW =  5.000000 
+		 FEMALE_REPRODUCTIVE_SKEW =  1.000000 
 		},
 
 		{#deme5
-		 male_reproductive_skew =  5.000000 
-		 female_reproductive_skew =  1.000000 
+		 MALE_REPRODUCTIVE_SKEW =  5.000000 
+		 FEMALE_REPRODUCTIVE_SKEW =  1.000000 
 		}
 	)
 	}

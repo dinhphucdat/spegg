@@ -1,4 +1,4 @@
-# Install script for directory: /home/wormlab/datdinh_server/tests/AssortativeTest
+# Install script for directory: /home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/wormlab/datdinh_server/tests/AssortativeTest/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

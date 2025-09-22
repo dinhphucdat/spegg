@@ -5,16 +5,18 @@ Responsible for creating CMakeLists.txt, build and compiling.
 ----------------------------------------------------------------
 User's manual: 
     1. Place this file into your project's directory
-    2. Optional: modify CURAND_LIB_DIR and CUDA_LIB_DIR as needed
+    2. Optional: modify GPU_ARCH, CURAND_LIB_DIR and CUDA_LIB_DIR as needed
     3. In the terminal, type:
 
-        $ python3 compile_project.py <your_spegg_codebase_directory> <GPU_arch> <0 if only need to generate cmake, 1 if ready to build>
+        $ python3 compile_project.py <your_spegg_codebase_directory> <0 if only need to generate cmake, 1 if ready to build>
 
 -----------------------------------------------------------------
 Author: Dat Dinh
 *_*
 """
 ########### Modify ####################
+
+CUDA_ARCH = [50, 61, 70, 75, 80, 86]  # Change this to your GPU's architecture
 CURAND_LIB_DIR = "/usr/local/cuda/lib64"
 CUDA_LIB_DIR = "/usr/local/cuda/lib64"
 #######################################
@@ -24,18 +26,16 @@ import sys
 import subprocess
 from pathlib import Path
 
-if len(sys.argv) < 4:
-    raise IndexError("Requires at least 3 arguments:\n----------------------------\n"
-                     + "\n    - spegg codebase's directory\n" 
+if len(sys.argv) < 3:
+    raise IndexError("Requires at least 2 arguments:\n----------------------------\n"
                      + "    - your GPU's architecture (etc: 61-real,...)\n" 
                      + "    - 0 if you don't want to build right away or anything else if you do\n"
                      + " ^ o ^")
 
 SPEGG_ROOT = sys.argv[1]
-CUDA_ARCH = sys.argv[2]
-IS_READY = sys.argv[3]
-CURAND_DIR = CURAND_LIB_DIR if len(sys.argv) < 5 else sys.argv[4]
-CUDA_DIR = CUDA_LIB_DIR if len(sys.argv) < 5 else sys.argv[5]
+IS_READY = sys.argv[2]
+CURAND_DIR = CURAND_LIB_DIR if len(sys.argv) < 4 else sys.argv[3]
+CUDA_DIR = CUDA_LIB_DIR if len(sys.argv) < 4 else sys.argv[4]
 
 class Bracket:
     """
@@ -154,7 +154,7 @@ CMAKELISTS = {
     "Set cuda architecture and optimization flags" : 
     [
         ("set", ["CMAKE_CUDA_FLAGS", "\""+r"${CMAKE_CUDA_FLAGS} -O3 --extended-lambda --expt-relaxed-constexpr"+"\""]), 
-        ("set", ["CMAKE_CUDA_ARCHITECTURES", CUDA_ARCH])
+        ("set", ["CMAKE_CUDA_ARCHITECTURES"] + [str(el) for el in CUDA_ARCH])
     ], 
 
     "Set where the binary would go" :
