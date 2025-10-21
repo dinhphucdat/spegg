@@ -25,8 +25,6 @@
  * 5. Calculate the quantiles based on a particular phenotype
  * 
  * Moreover, this class allows users to specify the names of the blank files to output the summary statistics and quantiles
- * 
- * @author xxx
  */
 class Statistics
 	{
@@ -183,7 +181,10 @@ class Statistics
 		thrust::device_vector<float> *quantiles_by_deme;
 	};
 
-
+/**
+ * @brief A functor to calculate the elements needed to compute variance
+ * 
+ */
 struct variance_elements_calculator
 	{
 	/* 
@@ -194,7 +195,28 @@ struct variance_elements_calculator
 	2: deme size
 	3: return value used to calculate variance
 	*/ 
-
+	
+	/**
+	 * @brief Call operator to calculate the elements needed to compute variance
+	 * 
+	 * <blockquote>
+	 * variance = $sum((x_i - mean)^2) / N$
+	 * </blockquote>
+	 * 
+	 * <blockquote>
+	 * Elements in the tuple:
+	 * ---------------------
+	 * <li>
+	 * <ol> 0: individual's random number value</ol>
+	 * <ol> 1: deme-wide mean</ol>
+	 * <ol> 2: deme size</ol>
+	 * <ol> 3: return value used to calculate variance</ol>
+	 * </li>
+	 * </blockquote>
+	 * 
+	 * @tparam tuple a tuple containing: 0: individual's random number value, 1: deme-wide mean, 2: deme size, 3: return value used to calculate variance
+	 * @param t a tuple containing: 0: individual's random number value, 1: deme-wide mean, 2: deme size, 3: return value used to calculate variance
+	 */
 	template <typename tuple>
 	__host__ __device__
 	void operator()(tuple t) 

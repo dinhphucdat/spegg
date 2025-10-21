@@ -11,6 +11,18 @@
 class inds_stochastic : public inds
 	{
 	public:
+		/**
+		 * @c inds_stochastic class, a subset of @c inds class, if the randomness of the initial population is desired.
+		 * 
+		 * <p>This constructor will prime up the random generator that will be used throughout the program for 
+		 * multiple purposes such as generate random initial pop information and other things as well.
+		 * </p>
+		 * @param size_val the initial size of the population of the species specified
+		 * @param maxsize_val the maximal capacity that can hold individuals of that species
+		 * @param num_demes the number of demes into which individuals of that species are split
+		 * @param species_ID_val the ID with which that specific species is tagged
+		 * @sa inds::inds for additional notes.
+		 */
 		inds_stochastic(int size_val, int maxsize_val, int seed_val, int ndemes, int species_ID_val);
 		/**
 		 * Main generator of the class
@@ -40,8 +52,11 @@ class inds_stochastic : public inds
 		 * How to add offspring into the population. <strong>User-defined function</strong>.
 		 */
 		virtual void addKids(environment *habitat) {};
+		/// @brief seed value for the random number generator
 		int seed;
+		/// @brief phenotype index that determines mortality
 		int MORTALITY_PHENOTYPE_INDEX;
+		/// @brief phenotype index that determines fecundity
 		int FECUNDITY_PHENOTYPE_INDEX;
 	};
 

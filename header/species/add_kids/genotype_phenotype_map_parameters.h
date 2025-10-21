@@ -15,7 +15,6 @@ using namespace libconfig;
 
 /**
  * @brief Collects parameters about genotypes and phenotypes from @c deme_config.txt
- * @author xxx
  */
 class GenotypePhenotypeMapParameters
 	{

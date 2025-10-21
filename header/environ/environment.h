@@ -12,22 +12,45 @@
 using namespace libconfig;
 
 /**
- * Simulates a habitat in which species go through their evolutional processes
+ * @brief Simulates a habitat in which species go through their evolutional processes
  */
 class environment
 	{
 	public:
+		/**
+		 * @brief Construct a new environment object
+		 * 
+		 * @param seed_val seed value for the random number generator
+		 * @param num_biotic_variables number of biotic variables
+		 * @param num_abiotic_variables number of abiotic variables
+		 * @param num_demes number of demes
+		 */
 		environment(int seed_val, int num_biotic_variables, int num_abiotic_variables, int num_demes);
+		/**
+		 * Initializes the abiotic variables from a configuration file
+		 * 
+		 * @param filename configuration file name
+		 */
 		void initialize_abiotic_variables(const char *filename);
+		/**
+		 * @brief Destroy the environment object
+		 * 
+		 */
 		~environment();
 
-		//Random number generator
+		/**
+		 * @brief Random number generator for the habitat
+		 * 
+		 */
 		curandGenerator_t gen;
 
-		//Misc data ints
+		/// @brief Seed value for the random number generator
 		int seed;
+		/// @brief Number of demes
 		int ndemes;
+		/// @brief Number of biotic variables
 		int nbiotic_vars;
+		/// @brief Number of abiotic variables
 		int nabiotic_vars;
 
 		//void update(int num_biotic_variables, int month);
@@ -62,9 +85,11 @@ class environment
 		virtual void update() = 0;
 		// Gradually move more of the other members into protected
 	protected:
+		/// @brief Vectors of names of abiotic variables
 		std::vector<std::string> abiotic_variable_names;
+		/// @brief Vector of lists of abiotic values, with the inner lists whose order relative to other inner lists corresponds to the abiotic names and whose size is of deme size
 		thrust::device_vector<float> *abiotic_variables;
-
+		/// @brief Map of abiotic variable names to their corresponding indices in the abiotic_variables vector
 		std::map<std::string, int> abiotic_variable_indices;
 	};
 #endif

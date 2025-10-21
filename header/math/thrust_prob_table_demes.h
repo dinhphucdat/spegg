@@ -8,7 +8,6 @@
  * 
  * For instance, if you have individuals with demes @c [0,0,1,1] and look up probabilities @code{.unparsed} [0.5,0.5, 0.5, 0.5] @endcode, a ThrustProbTable_demes object transforms this into @c [0.25,0.5,0.75,1.0] , and the random draws in deme 0 will be from @c U(0,0.5) and for deme 1 from @c U(0.5,1) so that deme-specific random draws can be made in parallel.
  * 
- * @author xx
  * @see ThrustProbTable
  */
 class ThrustProbTable_demes : public ThrustProbTable
@@ -46,13 +45,19 @@ class ThrustProbTable_demes : public ThrustProbTable
 		void adjust_randoms(thrust::device_vector<float>::iterator uniform_begin, thrust::device_vector<float>::iterator uniform_end,
 		thrust::device_vector<int>::iterator deme_offsets_begin, thrust::device_vector<int>::iterator deme_offsets_end,
 		thrust::device_vector<int>::iterator inds_deme_begin, thrust::device_vector<int>::iterator inds_deme_end);
-
+		/**
+		 * @brief Adjusts random numbers based on fixed offsets so that they can be used for drawing individuals for mating
+		 * 
+		 * @param uniform_begin iterator pointing to the beginning of the range of uniformly distributed random numbers.
+		 * @param uniform_end iterator pointing to the end of the range of uniformly distributed random numbers.
+		 * @param inds_deme_begin iterator pointing to the beginning of the range of deme sizes in the inds object.
+		 * @param inds_deme_end iterator pointing to the end of the range of deme sizes in the inds object.
+		 */
 		void adjust_randoms_fixed_offsets(thrust::device_vector<float>::iterator uniform_begin, thrust::device_vector<float>::iterator uniform_end, thrust::device_vector<int>::iterator inds_deme_begin, thrust::device_vector<int>::iterator inds_deme_end);
 	};
 
 /**
  * @brief This class behaves similarly to the @link ThrustProbTable_demes @endlink class, but with arguments of type double
- * @author xx
  * @see ThrustProbTable_demes
  */
 class ThrustProbTable_demes_Double : public ThrustProbTableDouble
@@ -73,7 +78,14 @@ class ThrustProbTable_demes_Double : public ThrustProbTableDouble
 		void adjust_randoms(thrust::device_vector<double>::iterator uniform_begin, thrust::device_vector<double>::iterator uniform_end,
 		thrust::device_vector<int>::iterator deme_offsets_begin, thrust::device_vector<int>::iterator deme_offsets_end,
 		thrust::device_vector<int>::iterator inds_deme_begin, thrust::device_vector<int>::iterator inds_deme_end);
-
+		/**
+		 * @brief Adjusts random numbers based on fixed offsets so that they can be used for drawing individuals for mating
+		 * 
+		 * @param uniform_begin iterator pointing to the beginning of the range of uniformly distributed random numbers.
+		 * @param uniform_end iterator pointing to the end of the range of uniformly distributed random numbers.
+		 * @param inds_deme_begin iterator pointing to the beginning of the range of deme sizes in the inds object.
+		 * @param inds_deme_end iterator pointing to the end of the range of deme sizes in the inds object.
+		 */
 		void adjust_randoms_fixed_offsets(thrust::device_vector<double>::iterator uniform_begin, thrust::device_vector<double>::iterator uniform_end, thrust::device_vector<int>::iterator inds_deme_begin, thrust::device_vector<int>::iterator inds_deme_end);
 	};
 

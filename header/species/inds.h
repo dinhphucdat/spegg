@@ -29,19 +29,141 @@ class inds
 		friend class Statistics;
 		friend class Parents;
 		friend class EggsNeonates;
-
+		/**
+		 * Instantiates an @c inds object with its related information specified in the @c deme_config.txt file.
+		 * <br>
+		 * <p>See <strong>deme_config.txt guide</strong> for more information.</p>
+		 * <p>
+		 * The program will terminate if:
+		 * <ul>
+		 *   <li>@c num_demes defined in @c Simulation.conf (essentially the value passed into this constructor) 
+		 * exceeds the value declared in @c deme_config.txt.</li>
+		 *   <li>@c size_val or @c maxsize_val are non-positive.</li>
+		 *   <li>@c maxsize_val is less than @c size_val.</li>
+		 * </ul>
+		 * Ensure these constraints are satisfied before using this function.
+		 * </p>
+		 * @param size_val the initial size of the population of the species specified
+		 * @param maxsize_val the maximal capacity that can hold individuals of that species
+		 * @param num_demes the number of demes into which individuals of that species are split
+		 * @param species_ID_val the ID with which that specific species is tagged
+		 */
 		inds(int size_val, int maxsize_val, int num_demes, int species_ID_val);
+		/**
+		 * @brief Destroy the inds object
+		 * 
+		 */
 		~inds();
-	
+		/**
+		 * A function to reorganize your data points so that inds (0, 1, 2, ..., size) consist only of individuals whose vital status = 1.
+		 * 
+		 * <p>
+		 * Rearranges the data structures of @c inds so that all the data points represented in each data structure 
+		 * from 0 to number_of_individuals represent individuals that are alive. The data points past 
+		 * number_of_individuals are garbaged. All operations on inds or its derived classes should, 
+		 * therefore, operate only on @c number_of_individuals data points. 
+		 * As a rule, @c number_of_individuals <= @c max_number_of_individuals; when the two are equal, 
+		 * the data from dead individuals should simply be overwritten 
+		 * until @c number_of_individuals < @c max_number_of_individuals again.
+		 * </p>
+		 * 
+		 * Ideally this would involve stream compaction rather than relegating the dead individuals to occupy empty spaces, but some preliminary experiments suggested stream compaction entails substantial performance costs in thrust compared to the approach using sorting and gathering. This solution is subject to change; should performance improvements in Thrust or CUDA allow it, we will return to stream compaction routines here instead.
+		 *
+		 */
 		void removeDead();
+		/**
+		 * @brief Set the Max Size object
+		 * 
+		 * @param n new maximum capacity of the population
+		 */
 		void setMaxSize(int n);
+		/**
+		 * @brief Sort individuals by their deme
+		 * 
+		 */
 		void sortByDeme();
+		/**
+		 * Fills in the vectors with specific data about every individual from a CSV file.
+		 * @note
+		 * <ul>
+		 * 	<li>If this object is not instantiated from @c inds_stochastic , a child of @c inds class, you may 
+		 * be required to call this function in order to provide the program with individual-oriented information.</li>
+		 * 	<li>If the row count, understood as initial population size, exceeds @c maxsize_val specified in the 
+		 * constructor, this program will be terminated.</li>
+		 * </ul>
+		 * 
+		 * <p>
+		 * The CSV file may look like:
+		 * <br>
+		 * 
+		 * <blockquote>
+		 * @code{.csv}
+		 * Index,Id,Status,Sex,Age,Deme,fgene0,fgene1,fgene2,mgene0,mgene1,mgene2,phen0,phen1,phen2
+		 * 0,0,1,0,0,0,-0.0752043,-0.0743299,0.195556,-0.0759161,0.0367624,-0.0496664,9.2444,0.5,0.468834
+		 * 1,1,1,1,0,0,0.000129433,-0.0521384,-0.228273,0.0881785,-0.00500755,-0.0091536,10.4415,0.5,-0.10614
+		 * 2,2,1,0,0,0,0.153293,-0.111343,0.0840508,-0.0710807,0.157572,0.132522,10.4111,0.5,0.574859
+		 * 3,3,1,1,0,0,0.0588492,0.0373746,0.0388453,-0.0822977,0.108823,-0.156742,9.88276,0.5,0.0731549
+		 * 4,4,1,0,0,0,-0.0719927,-0.0156143,-0.0481384,-0.176604,-0.00593068,0.0552063,8.75702,0.5,0.260602
+		 * 5,5,1,1,0,0,0.0448649,-0.0873122,-0.150351,0.167369,-0.144792,-0.140238,11.0612,0.5,-0.185884
+		 * ...
+		 * @endcode
+		 * </blockquote>
+		 * 
+		 * @c maternal_ID and @c paternal_ID for each individual can be provided as well, these are optional.
+		 * 
+		 * <br>
+		 * 
+		 * See more at the <strong>CSV guide</strong>.
+		 * </p>
+		 * 
+		 * @param filename name of the CSV file where initial values for specific individuals are stored
+		 */
 		virtual void initialize_from_CSV(const char *filename);
+		/**
+		 * Initializes the vectors storing information about @c fgenotype, @c mgenotype, and @c phenotype.
+		 * 
+		 * <p>This function allocates memory for the vectors with sizes determined by the specified 
+		 * number of loci and phenotypes. It does not populate the vectors with data, serving only to 
+		 * prepare them for subsequent use.</p>
+		 * 
+		 * @note
+		 * This function is intended as a helper method and should not be overridden.
+		 * 
+		 * @param nloci_val number of loci for which genotypic data are stored, already provided in @c deme_config.txt
+		 * @param nphen_val number of phenotypes, also already provided in @c deme_config.txt
+		 */
 		void initialize_individuals(int nloci_val, int nphen_val);
+		/**
+		 * @brief Exports the individuals' data to a CSV file
+		 * 
+		 */
 		void exportCsv();
+		/**
+		 * @brief Exports the individuals' data to a CSV file with a specified filename
+		 * 
+		 * @param filename name of the CSV file to export to
+		 */
 		void exportCsv(const char *filename);
+		/**
+		 * @brief Exports the individuals' data to a CSV file with a specified timestep
+		 * 
+		 * @param timestep timestep to include in the filename
+		 */
 		void exportCsv(int timestep);
+		/**
+		 * @brief exports the individuals' data to a CSV file with a specified filename and timestep
+		 * 
+		 * @param filename name of the CSV file to export to
+		 * @param timestep timestep to include in the filename
+		 */
 		void exportCsv(const char *filename, int timestep);
+		/**
+		 * @brief exports the individuals' data to a CSV file with a specified filename and timestep range
+		 * 
+		 * @param filename name of the CSV file to export to
+		 * @param timestep1 starting timestep
+		 * @param timestep2 ending timestep
+		 */
 		void exportCsv(const char *filename, int timestep1, int timestep2);
 
 		// Input parameters
@@ -137,6 +259,10 @@ class inds
 		void demeCalculations();
 	};
 
+/**
+ * @brief A functor to reassign the deme of dead individuals
+ * 
+ */
 struct reassign_dead_deme_functor
 	{
 	/*!
@@ -145,7 +271,13 @@ struct reassign_dead_deme_functor
 	*
 	*/
 
+	/// @brief number of demes
 	int num_demes;
+	/**
+	 * @brief Construct a new reassign dead deme functor object
+	 * 
+	 * @param number_demes number of demes
+	 */
 	reassign_dead_deme_functor(int number_demes) : num_demes(number_demes)
 	{};
 	/*
@@ -154,6 +286,14 @@ struct reassign_dead_deme_functor
 		0: status
 		1: deme
 	*/
+
+	/**
+	 * @brief Call operator to reassign the deme of dead individuals
+	 * 
+	 * @tparam tuple 
+	 * @param t tuples containing: 0: status, 1: deme
+	 * @return __host__ 
+	 */
 	template <typename tuple>
 	__host__ __device__ 
 	void operator() ( tuple t ) {

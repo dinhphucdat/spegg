@@ -14,11 +14,24 @@
 #include <thrust/host_vector.h>
 #include <thrust/functional.h>
 
+/** @{ @name One-dimensional index vector into two-dimensional index matrix */
+
+/**
+ * @brief Converts a one-dimensional index to two-dimensional indices
+ * 
+ * @param vector1_values vector to store the first dimension indices
+ * @param vector2_values vector to store the second dimension indices
+ * @param new_vector vector containing the one-dimensional indices
+ * @param values_for_vector_1 values for the first dimension
+ * @param values_for_vector_2 values for the second dimension
+ */
 void one_dim_two_dim(thrust::device_vector<int> &vector1_values,
 	     thrust::device_vector<int> &vector2_values,
 	     thrust::device_vector<int> &new_vector,
 	     thrust::device_vector<int> &values_for_vector_1,
 	     thrust::device_vector<int> &values_for_vector_2);
+
+/** @} */
 
 /* one_dim_two_dim can be tested in R via:
 A <- 0:19; B <- 0:29

@@ -7,7 +7,6 @@
 #include <thrust/functional.h>
 /**
  * @brief Functions the same way as its @link Statistics @endlink parent class, except it also analyzes demographic data
- * @author xxx
  * @see Statistics
  */
 class DemographicStatistics : public Statistics

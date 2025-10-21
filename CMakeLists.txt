@@ -11,6 +11,8 @@ set(CUDA_DIR_CACHE /usr/local/cuda/lib64 CACHE PATH "Path to the installed cuda 
 set(CURAND_DIR ${CURAND_DIR_CACHE})
 set(CUDA_DIR ${CUDA_DIR_CACHE})
 
+add_subdirectory(pybind11)
+
 # Find CUDA package
 find_package(CUDA REQUIRED)
 
@@ -165,6 +167,7 @@ target_link_libraries(species_specific_mate_sampling_rules ${EXTERNAL_LIBS} Samp
 target_link_libraries(Sampling_Event ${EXTERNAL_LIBS})
 target_link_libraries(assortative_mating_parents_class ${EXTERNAL_LIBS} Sampling_Input 
                                                 Sampling_Event)
+
 target_link_libraries(assortative_mating_neonates_class ${EXTERNAL_LIBS} assortative_mating_parents_class)
 # Set the appropriate compile options for CUDA files
 # set_target_properties(a.out PROPERTIES CUDA_SEPARABLE_COMPILATION ON)

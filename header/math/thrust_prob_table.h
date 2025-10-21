@@ -4,8 +4,7 @@
 #include <thrust/device_vector.h>
 
 /**
- * @brief A probability table for selecting random individuals
- * @author "Name"
+ * @brief A probability table for selecting random individuals based on arbitrary discrete distributions
  */
 class ThrustProbTable
 	{
@@ -68,7 +67,6 @@ class ThrustProbTable
 
 /**
  * @brief This class behaves similarly to @link ThrustProbTable @endlink class, but receives argument of type doubles
- * @author xx
  * @see ThrustProbTable
  */
 class ThrustProbTableDouble
@@ -93,6 +91,13 @@ class ThrustProbTableDouble
 		 * @param result Iterator pointing to the beginning of the range where the resulting indices will be stored.
 		 */
 		void draw(thrust::device_vector<double>::iterator uniform_begin, thrust::device_vector<double>::iterator uniform_end, thrust::device_vector<int>::iterator result);
+		/**
+		 * @brief Gets a pointer to the cumulative probabilities.
+		 * 
+		 * @see ThrustProbTable::get_cumulative_probabilities_ptr
+		 * 
+		 * @return thrust::device_ptr<double> - A device pointer to the first element of the cumulative probabilities vector.
+		 */
 		thrust::device_ptr<double> get_cumulative_probabilities_ptr();
 
 	protected:

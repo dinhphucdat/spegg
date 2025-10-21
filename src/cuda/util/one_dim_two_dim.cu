@@ -1,5 +1,9 @@
 #include <util/one_dim_two_dim.h>
 
+/**
+ * @brief A functor to convert a one-dimensional index to two-dimensional indices
+ * 
+ */
 struct one_dim_two_dim_functor
 	{
 /* 
@@ -25,9 +29,13 @@ then one_dim_two_dim works such that for each C_j, return the pair [Ai,Bk] that 
 
 Note that all of these are o(1) operations per variable element.
 */
-
+	/// Length of the second vector
 	int length_vector_2;
-
+	/**
+	 * @brief Construct a new one dim two dim functor object
+	 * 
+	 * @param len_vector_2 length of the second vector
+	 */
 	one_dim_two_dim_functor(int len_vector_2) : length_vector_2(len_vector_2)
 	{};
 	/* 
@@ -38,6 +46,17 @@ Note that all of these are o(1) operations per variable element.
 		1: corresponding output value for the first array
 		2: corresponding output value for the second array
 	*/ 
+
+	/**
+	 * @brief Operator to convert a one-dimensional index to two-dimensional indices
+	 * 
+	 * @tparam tuple 
+	 * @param t tuple containing the input value and output references. The tuple has three elements:
+	 *          - Element 0: input value from the single-dimensional array (int)
+	 *          - Element 1: reference to store the corresponding output value for the first array (int&)
+	 *          - Element 2: reference to store the corresponding output value for the second array (int&)
+	 * @return __host__ 
+	 */
 	template <typename tuple>
 	__host__ __device__
 	void operator()(tuple t) {

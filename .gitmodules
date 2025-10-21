@@ -1,3 +1,7 @@
 [submodule "header/util/rapidcsv"]
 	path = header/util/rapidcsv
 	url = https://github.com/d99kris/rapidcsv.git
+[submodule "pybind11"]
+	path = pybind11
+	url = ../../pybind/pybind11
+	branch = stable

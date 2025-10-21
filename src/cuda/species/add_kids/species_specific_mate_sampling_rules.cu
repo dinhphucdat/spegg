@@ -108,7 +108,12 @@ void SamplingInput_Mating::determine_number_of_individuals_to_be_sampled_poisson
 
 	// For each individual, based on their deme, identify the expected number of other individuals they are likely to sample
 	thrust::device_vector<float> mean_numbers_of_others_sampled( number_of_individuals_doing_the_sampling );
-	
+	// the "mean_number_of_others_sampled" parameter is a little fixed here, as when the population 
+	// grows bigger, the chance of being sampled should also increase. Therefore, 
+	// we might want to change this to be a function of population size in the future.
+	// A potential way is to refer to the concept of S-shape function in ecology (sigmoid curve). 
+	// S = 1 / (1 + exp(-k*(N-N0))), where N is population size, N0 is the inflection point, k is the steepness of the curve.
+	// Then the mean number of others sampled could be mean_number_of_others_sampled *
 	thrust::gather(deme_affiliation_of_sampling_individuals.begin(), 
 		       deme_affiliation_of_sampling_individuals.end(), 
 		       mating_parents->demeParameters->get_vector_ptr("mean_number_of_others_sampled"),

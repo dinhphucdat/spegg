@@ -62,19 +62,40 @@ amplify(amplify_counts, values_to_amplify, amplified_values);
 
 ********************************/
 
+/** @{ @name Amplifies a sequence of values based on provided frequencies for each */
 
+/**
+ * @brief Amplifies a sequence of values based on provided frequencies for each
+ * 
+ * @param values_to_amplify The values to be amplified
+ * @param amplify_counts The number of times each value in values_to_amplify should be repeated
+ * @param amplified_values The output vector containing the amplified values
+ */
 void amplify(thrust::device_vector<int> &values_to_amplify,
 	     thrust::device_vector<int> &amplify_counts,
 	     thrust::device_vector<int> &amplified_values);
 
-
+/**
+ * @brief Amplifies a sequence of float values based on provided frequencies for each
+ * 
+ * @param values_to_amplify The float values to be amplified
+ * @param amplify_counts The number of times each value in values_to_amplify should be repeated
+ * @param amplified_values The output vector containing the amplified float values
+ */
 void amplify_float(thrust::device_vector<float> &values_to_amplify,
 	     	   thrust::device_vector<int> &amplify_counts,
 	     	   thrust::device_vector<float> &amplified_values);
 
+/**
+ * @brief Amplifies a sequence of integer values based on provided frequencies for each
+ * @param amplify_counts The number of times each value in the sequence should be repeated
+ * @param number_of_elements_in_sequence The number of unique elements in the sequence
+ * @param amplified_values The output vector containing the amplified integer values
+ */
 void amplify_sequence(thrust::device_vector<int> &amplify_counts,
 	     int number_of_elements_in_sequence,
 	     thrust::device_vector<int> &amplified_values);
 
+/** @} */
 
 #endif

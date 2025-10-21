@@ -24,12 +24,42 @@ where potentially K_i = K_j for some subset of K, then you can create a random s
 
 */
 
+/** @{ @name Shuffle by key operations */
+
+/**
+ * @brief Shuffle the values based on the keys
+ * 
+ * @param keys keys associated with the values
+ * @param values values to be shuffled based on the keys
+ * @param gen random number generator
+ * @param shuffle_keys whether to shuffle the keys as well; default is false
+ */
 void shuffle_by_key(thrust::device_vector<int> &keys, thrust::device_vector<int> &values, curandGenerator_t gen, bool shuffle_keys=false);
-
+/**
+ * @brief Shuffle the values based on the keys
+ * 
+ * @param keys keys associated with the values
+ * @param values values to be shuffled based on the keys
+ * @param gen random number generator
+ */
 void shuffle_by_key(thrust::device_vector<int> &keys, thrust::device_vector<float> &values, curandGenerator_t gen);
-
+/**
+ * @brief Shuffle the values based on the keys
+ * 
+ * @param keys keys associated with the values
+ * @param values values to be shuffled based on the keys    
+ * @param gen random number generator
+ */
 void shuffle_by_key(thrust::device_vector<float> &keys, thrust::device_vector<int> &values, curandGenerator_t gen);
-
+/**
+ * @brief Shuffle the values based on the keys
+ * 
+ * @param keys keys associated with the values
+ * @param values values to be shuffled based on the keys
+ * @param gen random number generator
+ */
 void shuffle_by_key(thrust::device_vector<float> &keys, thrust::device_vector<float> &values, curandGenerator_t gen);
+
+/** @} */
 
 #endif

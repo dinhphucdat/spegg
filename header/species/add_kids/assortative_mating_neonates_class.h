@@ -20,7 +20,6 @@
 
 /**
  * @brief An extension to @link EggsNeonates @endlink where mating pairs are selectively chosen rather than randomly
- * @author xxx
  * 
  */
 class Assortative_mating_neonates :  public EggsNeonates 

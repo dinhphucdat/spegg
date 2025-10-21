@@ -14,7 +14,6 @@
 
 /**
  * @brief Responsible for inheritting the generic materials across generations
- * @author xxx
  */
 class EggsNeonates 
 	{

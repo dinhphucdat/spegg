@@ -10,7 +10,6 @@
 
 /**
  * @brief The class representing information about parents
- * @author xxx
  */
 class Parents
 	{
@@ -35,7 +34,9 @@ class Parents
 	     * - `finalize_parental_reproductive_probabilities()`
 	     */
 		virtual void setup_parents();
+		/// @brief the vector storing the indices of the individuals that are chosen to be female parents
 		thrust::device_vector<int> female_parents;
+		/// @brief the vector storing the indices of the individuals that are chosen to be male parents
 		thrust::device_vector<int> male_parents;
 		/// @brief potential number of kids
 		int Potential_Number_of_Kids;

@@ -7,44 +7,85 @@
 #include <species/inds.h>
 #include <species/add_kids/parents_class.h>
 #include <math.h>
+/**
+ * @brief A derived class of @link Parents @endlink that implements assortative mating
+ * 
+ * @see Parents
+ * 
+ */
 class Assortative_mating_parents : public Parents
 	{
 	public:
+		/**
+		 * @brief Construct a new Assortative_mating_parents object
+		 * @param species an @link inds_stochastic @endlink pointer representing the species
+		 */
 		Assortative_mating_parents(inds_stochastic *species);
-
+		/**
+		 * @brief Sets up the reproductive eligibility and probabilities for the population.
+		 * 
+		 */
 		void determine_parent_pair_probability();
+		/**
+		 * @brief probability that a parental pair would become parents
+		 * 
+		 */
 		thrust::device_vector<float> parental_pair_probability;
 		/// @brief @deprecated
 		void draw_parents();
 
 		/* female_parents, male_parents differs from females_list, males_list. In the assortative mating context, female_parents, male_parents merely stores the indices of individuals that can potentially be parents, while females_list,males_list stores the potential sampling space (ie., has duplicates) */
+
+		/// @brief list of females that can be parents. This list can have duplicates because it stores the potential sampling space
 		thrust::device_vector<int> females_list; 
+		/// @brief list of males that can be parents. This list can have duplicates because it stores the potential sampling space
 		thrust::device_vector<int> males_list;
-
+		/// @brief list of females that are chosen to be mothers
 		int total_reproductive_females;
+		/// @brief list of males that are chosen to be fathers
 		int total_reproductive_males;
-	
+		/// @brief list of demes that the pairs come from
 		thrust::device_vector<int> pair_demes;
-
+		/// @brief species ID
 		int species_ID;
 	protected:
-
+		/// @brief index of the phenotype that is used for assortative mating
 		int ASSORTATIVE_MATING_PHENOTYPE_INDEX;
-
+		/// @brief mating sampling scheme
+		/// 0: random mating
+		/// 1: assortative mating
+		/// 2: disassortative mating
 		int mate_sampling_scheme;
-
+		/// @brief number of males sampled per deme
 		thrust::device_vector<int> number_of_males_sampled;
+		/// @brief the trait used for assortative mating
 		thrust::device_vector<float> assortative_mating_trait;
-
+		/**
+		 * @brief Sets up the probability that a parental pair would become parents
+		 * 
+		 */
 		void Setup_ParentPairProbabilities();
-
+		/**
+		 * @brief Generates the list of potential parents
+		 * 
+		 */
 		void Generate_Parents_List();
-
+		/**
+		 * @brief Generates the list of potential females and transfers to @link @c females_list @endlink
+		 * 
+		 */
 		void Generate_Females_List();
+		/**
+		 * @brief Generates the list of potential males and transfers to @link @c males_list @endlink
+		 * 
+		 */
 		void Generate_Males_List();
 	};
 
-
+/**
+ * @brief A functor to assign males to females
+ * 
+ */
 struct assign_males
 	{
 	int *cumulative_males, *number_of_males_by_deme;
@@ -58,6 +99,23 @@ struct assign_males
 		1: female population
 		2: index of male
 	*/
+
+	/**
+	 * @brief Call operator to assign males to females
+	 * 
+	 * <blockquote>
+	 * Parameters in the tuple:
+	 * <li>
+	 * <ol> 0: index </ol>
+	 * <ol> 1: female population </ol>
+	 * <ol> 2: index of male </ol>
+	 * </li>
+	 * </blockquote>
+	 * 
+	 * @tparam tuple
+	 * @param t tuples containing: 0: index, 1: female population, 2: index of male
+	 * @return __host__ 
+	 */
 	template <typename tuple>
 	__host__ __device__
 	void operator()(tuple t) {
@@ -66,6 +124,10 @@ struct assign_males
 		}
 	};
 
+/**
+ * @brief A functor to calculate the pairwise mating probability between a female and a male
+ * 
+ */
 struct pairwise_mating_probability
 	{
 	float *assortative_mating_trait;
@@ -85,6 +147,14 @@ struct pairwise_mating_probability
 		3: female reproductive potential
 		4: pairwise mating probability
 	*/
+
+	/**
+	 * @brief Call operator to calculate the pairwise mating probability between a female and a male following a normal distribution
+	 * 
+	 * @tparam tuple 
+	 * @param t tuples containing: 0: female index, 1: male index, 2: deme the parents come from, 3: female reproductive potential, 4: pairwise mating probability
+	 * @return __host__ 
+	 */
 	template <typename tuple>
 	__host__ __device__
 	void operator()(tuple t) {

@@ -12,6 +12,12 @@
 class inds_stochastic_migratory : public inds_stochastic
 	{
 	public:
+		/**
+		 * <p>This constructor essentially initializes the <a href="">migration matrix</a></p>
+		 * 
+		 * <p>The object of this class expects a migration file required to be named as @c Migration_Probabilities.txt , 
+		 * with each individual's migration rate in each line. <strong>See more the guide</strong> on @c Migration_Probabilities.txt .</p>
+		 */
 		inds_stochastic_migratory(int size_val, int maxsize_val, int seed_val, int ndemes, int species_ID_val);
 		/**
 		 * A user-defined function for migration behavior

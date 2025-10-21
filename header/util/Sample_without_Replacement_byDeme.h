@@ -7,9 +7,21 @@
 
 // This version can be used to stratify sampling by deme, provided the individuals potentially conducting the sampling only sample one individual in each time step.
 
+/**
+ * @brief class that inherits from SamplingEvent and represents a sampling operation without replacement, stratified by demes.
+ * 
+ * @see SamplingEvent
+ * 
+ */
 class Sample_without_Replacement_byDeme : public SamplingEvent
 	{
 	public:
+		/**
+		 * @brief Construct a new Sample_without_Replacement_byDeme object
+		 * 
+		 * @param sampling_input pointer to a SamplingInput object
+		 * @param gen random number generator
+		 */
 		Sample_without_Replacement_byDeme(SamplingInput *sampling_input, curandGenerator_t gen)
 			{
 			this->sampling_input = sampling_input;
@@ -28,21 +40,42 @@ class Sample_without_Replacement_byDeme : public SamplingEvent
 			number_of_sampling_individuals_by_deme.resize(sampling_input->Num_Demes);
 			cumulative_sampling_individuals_by_deme.resize(sampling_input->Num_Demes);
 			}
+		/**
+		 * @brief Perform the sampling event. This method implements the specific sampling logic 
+		 * for sampling without replacement, stratified by demes.
+		 * 
+		 */
 		void sample() override;
+		/**
+		 * @brief Sets up the deme information for individuals being sampled.
+		 * 
+		 * @param demes_of_individuals_sampled A device vector containing the deme affiliations of individuals being sampled.
+		 */
 		void setup_demes(thrust::device_vector<int> &demes_of_individuals_sampled);
 
 	protected:
+		/// @brief Cumulative number of individuals that can be sampled, by deme
 		thrust::device_vector<int> cumulative_sampleable_individuals_by_deme;
+		/// @brief Cumulative number of individuals conducting the sampling, by deme
 		thrust::device_vector<int> cumulative_sampling_individuals_by_deme;
+		/// @brief Number of individuals conducting the sampling, by deme
 		thrust::device_vector<int> number_of_sampling_individuals_by_deme;
+		/// @brief Unique uniform random variables for sampling individuals being sampled
 		thrust::device_vector<double> unique_uniform_rvs;
+		/// @brief Demes of individuals being sampled
 		thrust::device_vector<int> demes_of_individuals_subject_to_sampling;
+		/// @brief For each individual conducting the sampling, the index of the individual being sampled
 		thrust::device_vector<int> index_to_sample;
 	};
 
 
 // A functor which, for each indiviudal conducting the sampling, assigns the index of the individuals subject to sampling which the individual conducting the sampling will pick. This is only used when sampling is stratified by demes. Note this assumes that the number of individuals conducting the sampling is less than or equal to the number of individuals being sampled.
 
+/**
+ * @brief A functor that assigns the index of individuals to be 
+ * sampled for each individual conducting the sampling, stratified by demes.
+ * 
+ */
 struct specify_index_to_sample
 	{
 	int *cumulative_demewise_sum_individuals_conducting_sampling;
@@ -58,6 +91,17 @@ struct specify_index_to_sample
 		2: the indices of the individuals subject to sampling by the individuals conducting the sampling (should be of same length as indices of individuals conducting the sampling)
 	*/
 
+	/**
+	 * @brief Call operator to assign the index of individuals to be 
+	 * sampled for each individual conducting the sampling, stratified by demes.
+	 * 
+	 * @tparam tuple 
+	 * @param t tuples containing: 
+	 * 		- 0: index of individuals conducting the sampling, 
+	 * 		- 1: deme of the individuals conducting the sampling, 
+	 * 		- 2: the indices of the individuals subject to sampling by the individuals conducting the sampling (should be of same length as indices of individuals conducting the sampling)
+	 * @return __host__ 
+	 */
 	template <typename tuple>
 	__host__ __device__
 	void operator()(tuple t) {

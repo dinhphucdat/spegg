@@ -16,6 +16,11 @@ find_path(SPEGG_ROOT_DIR
     DOC "Spegg root directory."
 )
 
+add_subdirectory(
+    ../../pybind11
+    ${CMAKE_BINARY_DIR}/pybind11${CMAKE_BINARY_DIR}/pybind11-build
+)
+
 if (SPEGG_ROOT_DIR)
     # Find include directories
     set(SPEGG_INCLUDE_DIRS
@@ -42,6 +47,11 @@ if (SPEGG_ROOT_DIR)
         find_library(SPEGG_CURAND_LIB curand REQUIRED HINTS ${CURAND_DIR})
         find_library(SPEGG_CUDA_LIB cuda REQUIRED HINTS ${CUDA_DIR})
         find_library(SPEGG_RT_LIB rt REQUIRED)
+        list(
+            APPEND PYBIND11_LIB 
+            pybind11::headers
+            pybind11::embed
+            pybind11::module)
         
         # Add external libraries to SPEGG_LIBRARIES
         list(APPEND SPEGG_LIBRARIES
@@ -49,6 +59,7 @@ if (SPEGG_ROOT_DIR)
             ${SPEGG_CURAND_LIB}
             ${SPEGG_CUDA_LIB}
             ${SPEGG_RT_LIB}
+            ${PYBIND11_LIB}
         )
         
         # Create imported target if not already created
@@ -83,4 +94,5 @@ mark_as_advanced(
     SPEGG_CURAND_LIB
     SPEGG_CUDA_LIB
     SPEGG_RT_LIB
+    PYBIND11_LIB
 )
