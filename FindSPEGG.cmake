@@ -17,7 +17,7 @@ find_path(SPEGG_ROOT_DIR
 )
 
 add_subdirectory(
-    ../../pybind11
+    ${SPEGG_ROOT}/pybind11
     ${CMAKE_BINARY_DIR}/pybind11-build
 )
 

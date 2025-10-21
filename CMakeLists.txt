@@ -11,8 +11,6 @@ set(CUDA_DIR_CACHE /usr/local/cuda/lib64 CACHE PATH "Path to the installed cuda 
 set(CURAND_DIR ${CURAND_DIR_CACHE})
 set(CUDA_DIR ${CUDA_DIR_CACHE})
 
-add_subdirectory(pybind11)
-
 # Find CUDA package
 find_package(CUDA REQUIRED)
 
