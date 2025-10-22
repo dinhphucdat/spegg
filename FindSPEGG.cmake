@@ -16,10 +16,12 @@ find_path(SPEGG_ROOT_DIR
     DOC "Spegg root directory."
 )
 
-add_subdirectory(
-    ${SPEGG_ROOT}/pybind11
-    ${CMAKE_BINARY_DIR}/pybind11-build
-)
+if(NOT TARGET pybind11::module)
+    add_subdirectory(
+        ${SPEGG_ROOT}/pybind11
+        ${CMAKE_CURRENT_BINARY_DIR}/pybind11-build
+    )
+endif()
 
 if (SPEGG_ROOT_DIR)
     # Find include directories
