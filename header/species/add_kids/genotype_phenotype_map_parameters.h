@@ -11,7 +11,16 @@
 #include <thrust/functional.h>
 #include <algorithm>
 
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/embed.h>
+#include <pybind11/numpy.h>
+#include <pybind11/functional.h>
+#include <pybind11/complex.h>
+#include <util/python_thrust_api.h>
+
 using namespace libconfig;
+namespace py = pybind11;
 
 /**
  * @brief Collects parameters about genotypes and phenotypes from @c deme_config.txt
@@ -42,6 +51,33 @@ class GenotypePhenotypeMapParameters
 		 * @return @c thrust::device_ptr<float> pointer of subarray for that parameter's information for all demes
 		 */
 		thrust::device_ptr<float> get_vector_ptr(const char *parameter_name);
+
+		// ------ NEW FUNCTIONALITY - DIRECT PARAMETER TRANSFERING FROM PYTHON PROGRAM ------- //
+
+		/**
+		 * @brief Construct a new Genotype Phenotype Map Parameters object.
+		 * 
+		 * This constructor is used for a Python-binding program for direct data 
+		 * transferring and will bypass the use of @c deme_config.txt
+		 * 
+		 * @param species_ID index of the species
+		 * @param phenotype_index index of the phenotypes across the population
+		 * @param genPhenParameterNamesAllPhenotypes parameter names compilation of all phenotypes. 
+		 * This should be a list of lists, where the outer dimension 
+		 * represents the number of phenotypes and the inner one stores 
+		 * specific parameters of that phenotype.
+		 * @param demeSpecificPhenParametersAllPhenotypes this should be a list of numpy's 2d arrays. 
+		 * The outer dimension should have the size of number of phenotypes. The first dimension 
+		 * of the inner numpy arrays should have the size of phenotype's specific parameters, 
+		 * and the second dimension of the numpy arrays should have the size of number of demes.
+		 */
+		GenotypePhenotypeMapParameters(
+			const int& species_ID, 
+			const int& phenotype_index, 
+			const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
+			const std::vector<py::array_t<float>>& demeSpecificPhenParametersAllPhenotypes
+		);
+		// ------------ END OF NEW FUNCTIONALITY --------------------------------------------- //
 	
 	protected:
 		/// @brief number of parameters
@@ -66,6 +102,21 @@ class GenotypePhenotypeMapParameters
 		void specify_parameter_index();
 		/// @brief A look-up table for parameters' indices
 		std::map<std::string, int> parameter_index;
+
+		// ------ NEW FUNCTIONALITY - DIRECT PARAMETER TRANSFERING FROM PYTHON PROGRAM ------- //
+		/**
+		 * @brief Put the names of the parameters into the underlying data structure(s).
+		 * 
+		 * @param parameterNames a vector of parameter names.
+		 */
+		void processParameterNames(const std::vector<std::string>& parameterNames);
+		/**
+		 * @brief Put the parameter values across the demes into underlying data structure(s).
+		 * 
+		 * @param demeSpecificParams a 2d numpy array containing demewise parameter values
+		 */
+		void processDemeSpecificParameters(const py::array_t<float>& demeSpecificParams);
+		// ------------ END OF NEW FUNCTIONALITY --------------------------------------------- //
 	};
 
 #endif

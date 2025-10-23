@@ -10,6 +10,52 @@ GenotypePhenotypeMapParameters::GenotypePhenotypeMapParameters(const char *filen
 	specify_parameter_index();
 	}
 
+// ------ NEW FUNCTIONALITY - DIRECT PARAMETER TRANSFERING FROM PYTHON PROGRAM ------- //
+GenotypePhenotypeMapParameters::GenotypePhenotypeMapParameters(
+	const int& species_ID, 
+	const int& phenotype_index, 
+	const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
+	const std::vector<py::array_t<float>>& demeSpecificPhenParametersAllPhenotypes
+) {
+	this->phenotype_index = phenotype_index;
+	std::vector<std::string> currentPhenParamNames = genPhenParameterNamesAllPhenotypes[phenotype_index];
+	py::array_t<float> currentPhenDemewiseVals = (
+			demeSpecificPhenParametersAllPhenotypes[phenotype_index]
+	);
+	processParameterNames(currentPhenParamNames);
+	processDemeSpecificParameters(currentPhenDemewiseVals);
+}
+
+void processParameterNames(const std::vector<std::string>& parameterNames) {
+	this->Number_of_Parameters = parameterNames.size();
+	this->Names_of_Genotype_Phenotype_Map_Parameters.resize(parameterNames.size());
+	std::copy(parameterNames.begin(), 
+		parameterNames.end(), 
+		this->Names_of_Genotype_Phenotype_Map_Parameters.begin());
+	specify_parameter_index();
+}
+
+void processDemeSpecificParameters(const py::array_t<float>& demeSpecificParams) {
+	py::array_t<float, py::array::c_style> phenDemewiseVals = (
+			demeSpecificParams
+			.cast<py::array_t<float, py::array::c_style>>()
+	);
+	const py::buffer_info buf = phenDemewiseVals.request();
+	if (buf.shape.size() != 2) {
+		throw std::runtime_error("The array is not a strict 2d array!");
+	}
+	if (buf.shape[0] != Number_of_Parameters) {
+		throw std::runtime_error(
+			"Number of parameters and the first dimension of array" +
+			"(size of number of parameters) are not the same!");
+	}
+	this->Number_of_Demes = (int) buf.shape[1];
+	deme_specific_parameters = new thrust::device_vector<float>[Number_of_Parameters];
+	numpy_array_to_thrust_vector<float>(
+		deme_specific_parameters, phenDemewiseVals
+	);
+}
+// ------------------- END OF NEW FUNCTIONALITY --------------------------- //
 
 void GenotypePhenotypeMapParameters::specify_parameter_index()
 	{
