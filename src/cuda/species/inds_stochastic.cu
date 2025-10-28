@@ -25,7 +25,7 @@ inds_stochastic::inds_stochastic(int size_val, int maxsize_val, int seed_val, in
 	FECUNDITY_PHENOTYPE_INDEX = (int) demeParameters->species_specific_values["FECUNDITY_PHENOTYPE_INDEX"];
 	}
 
-inds_stochastic(
+inds_stochastic::inds_stochastic(
 	int size_val, 
 	int maxsize_val, 
 	int seed_val, 
