@@ -17,10 +17,10 @@
 #include <util/python_thrust_api.h>
 
 namespace py = pybind11;
-namespace StringVector = std::vector<std::string>;
-namespace String2DVector = std::vector<std::vector<std::string>>;
-namespace StringFloatMap = std::map<std::string, float>;
-namespace FloatArrayVector = std::vector<py::array_t<float>>;
+using StringVector = std::vector<std::string>;
+using String2DVector = std::vector<std::vector<std::string>>;
+using StringFloatMap = std::map<std::string, float>;
+using FloatArrayVector = std::vector<py::array_t<float>>;
 
 /**
  * This class is a subset of @link inds inds @endlink, used when the initial population's attributes are 

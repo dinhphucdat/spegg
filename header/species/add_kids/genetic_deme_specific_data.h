@@ -23,9 +23,9 @@
 
 using namespace libconfig;
 namespace py = pybind11;
-namespace StringVector = std::vector<std::string>;
-namespace String2DVector = std::vector<std::vector<std::string>>;
-namespace FloatArrayVector = std::vector<py::array_t<float>>;
+using StringVector = std::vector<std::string>;
+using String2DVector = std::vector<std::vector<std::string>>;
+using FloatArrayVector = std::vector<py::array_t<float>>;
 
 /**
  * @brief A class to read in and store genetic parameters that are deme-specific
