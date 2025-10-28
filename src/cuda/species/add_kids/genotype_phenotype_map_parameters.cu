@@ -44,7 +44,7 @@ void GenotypePhenotypeMapParameters::processDemeSpecificParameters(const py::arr
 	if (buf.shape.size() != 2) {
 		throw std::runtime_error("The array is not a strict 2d array!");
 	}
-	if (buf.shape[0] != this.Number_of_Parameters) {
+	if (buf.shape[0] != Number_of_Parameters) {
 		throw std::runtime_error(
 			"Number of parameters and the first dimension of array (size of number of parameters) are not the same!");
 	}
