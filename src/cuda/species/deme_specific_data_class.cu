@@ -192,7 +192,7 @@ DemeSettings::DemeSettings(
 		speciesID, 
 		phenotypeNames, 
 		genPhenParameterNamesAllPhenotypes, 
-		demeSpecificPhenParametersAllPhenotypes
+		demeSpecificPhenParametersAllPhenotypes, 
 		lociNames, 
 		recombinationRates, 
 		demeSpecificMutationRates, 
@@ -235,7 +235,10 @@ void DemeSettings::processDemeSpecificValues(const StringFloatMap& speciesSpecif
 	this->Number_of_Species_Specific_Values = species_specific_values.size();
 
 	species_specific_values_names.resize(Number_of_Species_Specific_Values);
-	species_specific_values_names = species_specific_values | std::views::keys | std::ranges::to<std::vector>();
+	species_specific_values_names.clear(); // Ensure the destination vector is empty
+	for (const auto& pair : species_specific_values) {
+		species_specific_values_names.push_back(pair.first);
+	}
 }
 
 // ------------------------------- END OF THIS NEW FUNCTIONALITY -------------------------------- //
