@@ -207,9 +207,9 @@ void DemeSettings::processParameters(
 	const StringVector&    			 parameterNames, 
 	const py::array_t<float>& 		 demeWideParameters
 ) {
-	this->Number_of_Parameters = parameterNames.size();
-	this->Number_of_Demes = numDemes;
-	this->parameter_names.resize(parameterNames.size());
+	Number_of_Parameters = parameterNames.size();
+	Number_of_Demes = numDemes;
+	parameter_names.resize(parameterNames.size());
 	std::copy(parameterNames.begin(), parameterNames.end(), this->parameter_names.begin());
 	specify_parameter_index();
 
@@ -232,7 +232,7 @@ void DemeSettings::processParameters(
 
 void DemeSettings::processDemeSpecificValues(const StringFloatMap& speciesSpecificValues) {
 	species_specific_values = speciesSpecificValues;
-	this->Number_of_Species_Specific_Values = species_specific_values.size();
+	Number_of_Species_Specific_Values = species_specific_values.size();
 
 	species_specific_values_names.resize(Number_of_Species_Specific_Values);
 	species_specific_values_names.clear(); // Ensure the destination vector is empty

@@ -177,7 +177,7 @@ void DemeGeneticsSettings::processGenotypicInfo(
 	const py::array_t<float>&		 demeSpecificMutationMagnitudes
 ) {
 	// loci names
-	this->Number_of_Loci = lociNames.size();
+	Number_of_Loci = lociNames.size();
 	loci_names.resize(Number_of_Loci);
 	std::copy(lociNames.begin(), lociNames.end(), loci_names.begin());
 
@@ -244,7 +244,7 @@ void DemeGeneticsSettings::processPhenotypicInfo(
 	const FloatArrayVector& demeSpecificPhenParametersAllPhenotypes
 ) {
 	// number of phenotypes, phenotype names
-	this->Number_of_Phenotypes = phenotypeNames.size();
+	Number_of_Phenotypes = phenotypeNames.size();
 	phenotype_names.resize(Number_of_Phenotypes);
 	std::copy(phenotypeNames.begin(), phenotypeNames.end(), phenotype_names.begin());
 

@@ -27,11 +27,11 @@ GenotypePhenotypeMapParameters::GenotypePhenotypeMapParameters(
 }
 
 void processParameterNames(const StringVector& parameterNames) {
-	this->Number_of_Parameters = parameterNames.size();
-	this->Names_of_Genotype_Phenotype_Map_Parameters.resize(parameterNames.size());
+	Number_of_Parameters = parameterNames.size();
+	Names_of_Genotype_Phenotype_Map_Parameters.resize(parameterNames.size());
 	std::copy(parameterNames.begin(), 
 		parameterNames.end(), 
-		this->Names_of_Genotype_Phenotype_Map_Parameters.begin());
+		Names_of_Genotype_Phenotype_Map_Parameters.begin());
 	specify_parameter_index();
 }
 
@@ -48,7 +48,7 @@ void processDemeSpecificParameters(const py::array_t<float>& demeSpecificParams)
 		throw std::runtime_error(
 			"Number of parameters and the first dimension of array (size of number of parameters) are not the same!");
 	}
-	this->Number_of_Demes = static_cast<int>(buf.shape[1]);
+	Number_of_Demes = static_cast<int>(buf.shape[1]);
 	deme_specific_parameters = new thrust::device_vector<float>[Number_of_Parameters];
 	numpy_array_to_thrust_vector<float>(
 		deme_specific_parameters, phenDemewiseVals
