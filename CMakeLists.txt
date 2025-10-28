@@ -14,6 +14,14 @@ set(CUDA_DIR ${CUDA_DIR_CACHE})
 # Find CUDA package
 find_package(CUDA REQUIRED)
 
+# Find pybind11
+if (NOT TARGET pybind11::module)
+    add_subdirectory(
+        ${CMAKE_SOURCE_DIR}/pybind11 
+        ${CMAKE_CURRENT_BINARY_DIR}/pybind11_base
+    )
+endif()
+
 # Set Required C++ Standard Ensure the appropriate C++ standard is set explicitly
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -119,12 +127,20 @@ find_library(CURAND_LIB curand REQUIRED HINTS ${CURAND_DIR})
 find_library(CUDA_LIB cuda REQUIRED HINTS ${CUDA_DIR})
 find_library(RT_LIB rt REQUIRED)
 
+# Pybind11 libraries
+list(
+    APPEND PYBIND11_LIB 
+    pybind11::headers
+    pybind11::embed
+    pybind11::module)
+
 # Store the list of external libraries in a variable
 set(EXTERNAL_LIBS
     ${LIBCONFIG_LIB}
     ${CURAND_LIB}
     ${CUDA_LIB}
     ${RT_LIB}
+    ${PYBIND11_LIB}
 )
 
 # Link target libraries

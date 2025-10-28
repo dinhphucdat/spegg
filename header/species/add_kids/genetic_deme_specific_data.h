@@ -10,9 +10,18 @@
 #include <thrust/device_vector.h>
 #include <thrust/functional.h>
 
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/embed.h>
+#include <pybind11/numpy.h>
+#include <pybind11/functional.h>
+#include <pybind11/complex.h>
+#include <util/python_thrust_api.h>
+
 #include <species/add_kids/genotype_phenotype_map_parameters.h>
 
 using namespace libconfig;
+namespace py = pybind11;
 
 /**
  * @brief A class to read in and store genetic parameters that are deme-specific
@@ -30,6 +39,41 @@ class DemeGeneticsSettings
 		 * @param species_ID species ID, defined by users' @c inds object
 		 */
 		DemeGeneticsSettings(const char *filename, int species_ID);
+		/// @brief Destroys the object and its associated dynamically allocated objects
+		~DemeGeneticsSettings();
+
+		// -------------- NEW FUNCTIONALITY - READ FROM PYTHON ------------- //
+
+		/**
+		 * @brief Construct a new Deme Genetics Settings object.
+		 * 
+		 * This operation is designed to let users directly pass the parameters in 
+		 * without having to create any intermediary file (i.e. @c deme_config.txt ), 
+		 * thus reduces the overhead of making too many IO request if this project is 
+		 * going to be optimized with any machine learning method.
+		 * 
+		 * @param speciesID species ID
+		 * @param phenotypeNames a Python list of phenotype names
+		 * @param genPhenParameterNamesAllPhenotypes phenotype parameters for every phenotype. This is a 2D list, with the first dimension being the number of phenotypes, the second one the number of subparameters for each phenotype
+		 * @param demeSpecificPhenParametersAllPhenotypes a Python list of 2D numpy arrays. The list should have the size of the number of phenotypes, and for each numpy array, dimension 1 should be subparameters, and dimension 2 should be the value of that specific subparameter for every deme
+		 * @param lociNames a Python list of loci names
+		 * @param recombinationRates a Python numpy array of recombination rate. This is a 1D array, its size of the number of loci
+		 * @param demeSpecificMutationRates a numpy array of deme-specific mutation rates. Dimension 1 is number of loci, dimension 2 is that locus's mutation rate for every deme
+		 * @param demeSpecificMutationMagnitudes a numpy array of deme-specific mutation magnitudes. Dimension 1 is number of loci, dimension 2 is that locus's mutation magnitude for every deme
+		 */
+		DemeGeneticsSettings(
+			const int&									 speciesID, 
+			const std::vector<std::string>& 			 phenotypeNames, 
+			const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
+			const std::vector<py::array_t<float>>& 		 demeSpecificPhenParametersAllPhenotypes
+			const std::vector<std::string>& 			 lociNames, 
+			const py::array_t<float>& 					 recombinationRates, 
+			const py::array_t<float>&  					 demeSpecificMutationRates, 
+			const py::array_t<float>&					 demeSpecificMutationMagnitudes
+		);
+
+		// -------------- END OF THIS NEW FUNCTIONALITY -------------------- //
+
 		/// @brief recombination rates by loci
 		thrust::device_vector<float> recombination_rates;
 		/// @brief genphenotype map parameters by phenotype
@@ -78,6 +122,44 @@ class DemeGeneticsSettings
 		thrust::device_vector<float> *deme_specific_mutation_magnitudes;
 		/// @brief loci names vector
 		std::vector<std::string> loci_names;
+
+		// -------------- NEW FUNCTIONALITY - READ FROM PYTHON ------------- //
+
+		/**
+		 * @brief Process the genotypic information.
+		 * 
+		 * A part of the new functionality, that is directly read parameters from Python interface
+		 * 
+		 * @param lociNames a Python list of loci names
+		 * @param recombinationRates a Python numpy array of recombination rate. This is a 1D array, its size of the number of loci
+		 * @param demeSpecificMutationRates a numpy array of deme-specific mutation rates. Dimension 1 is number of loci, dimension 2 is that locus's mutation rate for every deme
+		 * @param demeSpecificMutationMagnitudes a numpy array of deme-specific mutation magnitudes. Dimension 1 is number of loci, dimension 2 is that locus's mutation magnitude for every deme
+		 */
+		void processGenotypicInfo(
+			const std::vector<std::string>&  lociNames, 
+			const py::array_t<float>&  	 	 recombinationRates, 
+			const py::array_t<float>& 	 	 demeSpecificMutationRates, 
+			const py::array_t<float>&		 demeSpecificMutationMagnitudes
+		);
+
+		/**
+		 * @brief Process the phenotypic information. 
+		 * 
+		 * A part of the new functionality, that is directly read parameters from Python interface
+		 * 
+		 * @param speciesID species ID
+		 * @param phenotypeNames a Python list of phenotype names
+		 * @param genPhenParameterNamesAllPhenotypes phenotype parameters for every phenotype. This is a 2D list, with the first dimension being the number of phenotypes, the second one the number of subparameters for each phenotype
+		 * @param demeSpecificPhenParametersAllPhenotypes a Python list of 2D numpy arrays. The list should have the size of the number of phenotypes, and for each numpy array, dimension 1 should be subparameters, and dimension 2 should be the value of that specific subparameter for every deme
+		 */
+		void processPhenotypicInfo(
+			const int& 									 speciesID, 
+			const std::vector<std::string>& 			 phenotypeNames, 
+			const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
+			const std::vector<py::array_t<float>>& 		 demeSpecificPhenParametersAllPhenotypes
+		);
+
+		// -------------- END OF THIS NEW FUNCTIONALITY -------------------- //
 	};
 
 #endif

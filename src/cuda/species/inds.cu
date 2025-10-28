@@ -61,6 +61,78 @@ inds::inds(int size_val, int maxsize_val, int num_demes, int species_ID_val) : s
 	thrust::fill(status.begin(), status.begin() + size, 1);
 	}
 
+inds::inds(
+	int size_val, 
+	int maxsize_val, 
+	int num_demes, 
+	int species_ID_val, 
+	const std::vector<std::string>&    			 parameterNames, 
+	const py::array_t<float>& 		 			 demeWideParameters, 
+	std::map<std::string, float>& 				 speciesSpecificValues, 
+	const std::vector<std::string>& 			 phenotypeNames, 
+	const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
+	const std::vector<py::array_t<float>>& 		 demeSpecificPhenParametersAllPhenotypes
+	const std::vector<std::string>& 			 lociNames, 
+	const py::array_t<float>& 					 recombinationRates, 
+	const py::array_t<float>&  					 demeSpecificMutationRates, 
+	const py::array_t<float>&					 demeSpecificMutationMagnitudes
+) {
+	/*
+	* A very limited initialization method which creates the data structures and performs a basic sanity check to make sure that the maximum and starting numbers of individuals are biologically meaningful.
+	*/
+	//Sanity check.
+	if (size_val < 0 || maxsize_val < 0) {
+		std::cerr << "Population size must be non-negative!" << std::endl;
+		exit(1);
+	}
+	if (size_val > maxsize_val) {
+		std::cerr << "Maximum size must be greater or equal to initial population size!" << std::endl;
+		exit(1);
+	}
+
+	Num_Demes = num_demes;
+	
+	deme_sizes.resize(Num_Demes);
+	max_deme_sizes.resize(Num_Demes);
+
+	species_ID = species_ID_val;
+
+	demeParameters = new DemeSettings(
+		num_demes, 
+		species_ID_val, 
+		parameterNames, 
+		demeWideParameters, 
+		speciesSpecificValues, 
+		phenotypeNames, 
+		genPhenParameterNamesAllPhenotypes, 
+		demeSpecificPhenParametersAllPhenotypes
+		lociNames, 
+		recombinationRates, 
+		demeSpecificMutationRates, 
+		demeSpecificMutationMagnitudes
+	);
+
+	if (demeParameters->check_number_of_demes() < Num_Demes)
+		{
+		std::cout << "The number of demes specified in the simulation_conf file cannot exceed the number specified in your deme_config.txt file; Please fix this before proceeding. " << std::endl;
+		exit(1);
+		}
+
+	nloci = (int) demeParameters->GeneticArchitecture->Number_of_Loci;
+	nphen = (int) demeParameters->GeneticArchitecture->Number_of_Phenotypes;
+
+	initialize_individuals(nloci, nphen);
+	//Set maxsize.
+	maxsize = maxsize_val;
+	setMaxSize(maxsize);
+
+	demeCalculations();
+	//Fill in ID, STATUS, and DEME.
+	size = size_val;
+	thrust::sequence(id.begin(), id.begin() + size);
+	thrust::fill(status.begin(), status.begin() + size, 1);
+}
+
 void inds::initialize_individuals(int nloci, int nphen)
 	{
 	//Allocate gene and phen data vectors.

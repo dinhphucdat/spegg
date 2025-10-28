@@ -25,3 +25,52 @@ inds_stochastic::inds_stochastic(int size_val, int maxsize_val, int seed_val, in
 	FECUNDITY_PHENOTYPE_INDEX = (int) demeParameters->species_specific_values["FECUNDITY_PHENOTYPE_INDEX"];
 	}
 
+inds_stochastic(
+	int size_val, 
+	int maxsize_val, 
+	int seed_val, 
+	int num_demes, 
+	int species_ID_val, 
+	const std::vector<std::string>&    			 parameterNames, 
+	const py::array_t<float>& 		 			 demeWideParameters, 
+	std::map<std::string, float>& 				 speciesSpecificValues, 
+	const std::vector<std::string>& 			 phenotypeNames, 
+	const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
+	const std::vector<py::array_t<float>>& 		 demeSpecificPhenParametersAllPhenotypes
+	const std::vector<std::string>& 			 lociNames, 
+	const py::array_t<float>& 					 recombinationRates, 
+	const py::array_t<float>&  					 demeSpecificMutationRates, 
+	const py::array_t<float>&					 demeSpecificMutationMagnitudes
+) : inds(
+	size_val, 
+	maxsize_val, 
+	num_demes, 
+	species_ID_val, 
+	parameterNames, 
+	demeWideParameters, 
+	speciesSpecificValues, 
+	phenotypeNames, 
+	genPhenParameterNamesAllPhenotypes, 
+	demeSpecificPhenParametersAllPhenotypes
+	lociNames, 
+	recombinationRates, 
+	demeSpecificMutationRates, 
+	demeSpecificMutationMagnitudes
+) {
+	seed = seed_val;
+
+	int size = 100;
+	curandCreateGenerator(&gen, CURAND_RNG_PSEUDO_DEFAULT);
+	curandSetPseudoRandomGeneratorSeed(gen, seed);
+
+	//curand declarations
+	thrust::device_vector<float> rand(size);
+	float *rand_ptr = raw_pointer_cast(&rand[0]);
+	curandGenerateUniform(gen, rand_ptr, size); // priming up the random number generator takes some time, get it done early.
+	rand.clear();
+
+	//Specify the indices among the phenotypes for the fitness components
+	MORTALITY_PHENOTYPE_INDEX = (int) demeParameters->species_specific_values["MORTALITY_PHENOTYPE_INDEX"];
+	FECUNDITY_PHENOTYPE_INDEX = (int) demeParameters->species_specific_values["FECUNDITY_PHENOTYPE_INDEX"];
+}
+

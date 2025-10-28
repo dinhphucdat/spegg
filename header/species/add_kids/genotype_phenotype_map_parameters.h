@@ -78,6 +78,7 @@ class GenotypePhenotypeMapParameters
 			const std::vector<py::array_t<float>>& demeSpecificPhenParametersAllPhenotypes
 		);
 		// ------------ END OF NEW FUNCTIONALITY --------------------------------------------- //
+		~GenotypePhenotypeMapParameters();
 	
 	protected:
 		/// @brief number of parameters

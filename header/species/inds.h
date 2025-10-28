@@ -5,8 +5,19 @@
 #include <thrust/device_vector.h>
 #include <thrust/gather.h>
 
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/embed.h>
+#include <pybind11/numpy.h>
+#include <pybind11/functional.h>
+#include <pybind11/complex.h>
+#include <util/python_thrust_api.h>
+
 #include <species/deme_specific_data_class.h>
 #include <environ/environment.h>
+
+namespace py = pybind11;
+
 /*!
  *
  * A base class for storing the individuals belonging to a specific species, and performing 
@@ -49,6 +60,50 @@ class inds
 		 * @param species_ID_val the ID with which that specific species is tagged
 		 */
 		inds(int size_val, int maxsize_val, int num_demes, int species_ID_val);
+
+		/**
+		 * @brief Construct a new inds object.
+		 * 
+		 * This operation is designed to let users directly pass the parameters in 
+		 * without having to create any intermediary file (i.e. @c deme_config.txt ), 
+		 * thus reduces the overhead of making too many IO request if this project is 
+		 * going to be optimized with any machine learning method.
+		 * 
+		 * @param size_val the initial size of the population of the species specified
+		 * @param maxsize_val the maximal capacity that can hold individuals of that species
+		 * @param num_demes the number of demes into which individuals of that species are split
+		 * @param species_ID_val the ID with which that specific species is tagged@param size_val 
+		 * @param parameterNames a Python list of parameter names
+		 * @param demeWideParameters a numpy array storing float values of deme-wise parameters. Should be corresponding to the order of the list of parameter names
+		 * @param speciesSpecificValues a Python dictionary of species specific values. Keys must be value names and values should be the corresponding float values
+		 * @param phenotypeNames a Python list of phenotype names
+		 * @param genPhenParameterNamesAllPhenotypes phenotype parameters for every phenotype. This is a 2D list, with the first dimension being the number of phenotypes, the second one the number of subparameters for each phenotype
+		 * @param demeSpecificPhenParametersAllPhenotypes this should be a list of numpy's 2d arrays. 
+		 * The outer dimension should have the size of number of phenotypes. The first dimension 
+		 * of the inner numpy arrays should have the size of phenotype's specific parameters, 
+		 * and the second dimension of the numpy arrays should have the size of number of demes.
+		 * @param lociNames a Python list of loci names
+		 * @param recombinationRates a Python numpy array of recombination rate. This is a 1D array, its size of the number of loci
+		 * @param demeSpecificMutationRates a numpy array of deme-specific mutation rates. Dimension 1 is number of loci, dimension 2 is that locus's mutation rate for every deme
+		 * @param demeSpecificMutationMagnitudes a numpy array of deme-specific mutation magnitudes. Dimension 1 is number of loci, dimension 2 is that locus's mutation magnitude for every deme
+		 */
+		inds(
+			int size_val, 
+			int maxsize_val, 
+			int num_demes, 
+			int species_ID_val, 
+			const std::vector<std::string>&    			 parameterNames, 
+			const py::array_t<float>& 		 			 demeWideParameters, 
+			std::map<std::string, float>& 				 speciesSpecificValues, 
+			const std::vector<std::string>& 			 phenotypeNames, 
+			const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
+			const std::vector<py::array_t<float>>& 		 demeSpecificPhenParametersAllPhenotypes
+			const std::vector<std::string>& 			 lociNames, 
+			const py::array_t<float>& 					 recombinationRates, 
+			const py::array_t<float>&  					 demeSpecificMutationRates, 
+			const py::array_t<float>&					 demeSpecificMutationMagnitudes
+		);
+
 		/**
 		 * @brief Destroy the inds object
 		 * 

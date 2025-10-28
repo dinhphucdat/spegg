@@ -49,7 +49,7 @@ void processDemeSpecificParameters(const py::array_t<float>& demeSpecificParams)
 			"Number of parameters and the first dimension of array" +
 			"(size of number of parameters) are not the same!");
 	}
-	this->Number_of_Demes = (int) buf.shape[1];
+	this->Number_of_Demes = static_cast<int>(buf.shape[1]);
 	deme_specific_parameters = new thrust::device_vector<float>[Number_of_Parameters];
 	numpy_array_to_thrust_vector<float>(
 		deme_specific_parameters, phenDemewiseVals
@@ -133,4 +133,6 @@ thrust::device_ptr<float> GenotypePhenotypeMapParameters::get_vector_ptr(const c
 	return(&deme_specific_parameters[parameter_index[parameter_name]][0]);
 	}
 
-
+GenotypePhenotypeMapParameters::~GenotypePhenotypeMapParameters() {
+	delete[] deme_specific_parameters;
+}

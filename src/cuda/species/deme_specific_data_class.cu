@@ -1,4 +1,5 @@
 #include <species/deme_specific_data_class.h>
+#include <ranges>
 
 DemeSettings::DemeSettings(const char *filename, int species_ID)
 	{
@@ -171,3 +172,70 @@ bool DemeSettings::does_parameter_exist(const char *parameter_name)
 		}
 	}
 
+// ------------------------------- NEW FUNCTIONALITY - PYTHON PARAM PASSING ------------------------------ //
+
+DemeSettings::DemeSettings(
+	const int&									 numDemes,
+	const int&									 speciesID, 
+	const std::vector<std::string>&    			 parameterNames, 
+	const py::array_t<float>& 		 			 demeWideParameters, 
+	std::map<std::string, float>& 				 speciesSpecificValues, 
+	const std::vector<std::string>& 			 phenotypeNames, 
+	const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
+	const std::vector<py::array_t<float>>& 		 demeSpecificPhenParametersAllPhenotypes
+	const std::vector<std::string>& 			 lociNames, 
+	const py::array_t<float>& 					 recombinationRates, 
+	const py::array_t<float>&  					 demeSpecificMutationRates, 
+	const py::array_t<float>&					 demeSpecificMutationMagnitudes
+) {
+	GeneticArchitecture = new DemeGeneticsSettings(
+		speciesID, 
+		phenotypeNames, 
+		genPhenParameterNamesAllPhenotypes, 
+		demeSpecificPhenParametersAllPhenotypes
+		lociNames, 
+		recombinationRates, 
+		demeSpecificMutationRates, 
+		demeSpecificMutationMagnitudes
+	);
+	processParameters(numDemes, parameterNames, demeWideParameters);
+	processDemeSpecificValues(speciesSpecificValues);
+}
+
+void DemeSettings::processParameters(
+	const int&						 numDemes, 
+	const std::vector<std::string>&    parameterNames, 
+	const py::array_t<float>& 		 demeWideParameters
+) {
+	this->Number_of_Parameters = parameterNames.size();
+	this->Number_of_Demes = numDemes;
+	this->parameter_names.resize(parameterNames.size());
+	std::copy(parameterNames.begin(), parameterNames.end(), this->parameter_names.begin());
+	specify_parameter_index();
+
+	py::array_t<float, py::array::c_style> demeWideParamArr = (
+		demeWideParameters.cast<py::array_t<float, py::array::c_style>>()
+	);
+	const py::buffer_info buf = demeWideParamArr.request();
+	if (buf.shape.size() != 2) {
+		throw std::runtime_error("The deme wide parameter array must have two dimensions: (Num Params, Num Demes)");
+	}
+	if (buf.shape[0] != Number_of_Parameters) {
+		throw std::runtime_error("Dimension 1 of deme wide parameter array should have size of Number of Parameters");
+	}
+	if (buf.shape[1] != numDemes) {
+		throw std::runtime_error("Dimension 2 of deme wide parameter array should have size of Number of Demes");
+	}
+	deme_wide_parameters = new thrust::device_vector<float>[Number_of_Parameters];
+	numpy_array_to_thrust_vector<float>(deme_wide_parameters, demeWideParamArr);
+}
+
+void DemeSettings::processDemeSpecificValues(const std::map<std::string, float>& speciesSpecificValues) {
+	species_specific_values = speciesSpecificValues;
+	this->Number_of_Species_Specific_Values = species_specific_values.size();
+
+	species_specific_values_names.resize(Number_of_Species_Specific_Values);
+	species_specific_values_names = species_specific_values | std::views::keys | std::ranges::to<std::vector>();
+}
+
+// ------------------------------- END OF THIS NEW FUNCTIONALITY -------------------------------- //
