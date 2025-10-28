@@ -51,7 +51,7 @@ inds_stochastic(
 	speciesSpecificValues, 
 	phenotypeNames, 
 	genPhenParameterNamesAllPhenotypes, 
-	demeSpecificPhenParametersAllPhenotypes
+	demeSpecificPhenParametersAllPhenotypes, 
 	lociNames, 
 	recombinationRates, 
 	demeSpecificMutationRates, 
