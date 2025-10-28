@@ -14,8 +14,8 @@ GenotypePhenotypeMapParameters::GenotypePhenotypeMapParameters(const char *filen
 GenotypePhenotypeMapParameters::GenotypePhenotypeMapParameters(
 	const int& species_ID, 
 	const int& phenotype_index, 
-	const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
-	const std::vector<py::array_t<float>>& demeSpecificPhenParametersAllPhenotypes
+	const String2DVector& genPhenParameterNamesAllPhenotypes, 
+	const FloatArrayVector& demeSpecificPhenParametersAllPhenotypes
 ) {
 	this->phenotype_index = phenotype_index;
 	std::vector<std::string> currentPhenParamNames = genPhenParameterNamesAllPhenotypes[phenotype_index];
@@ -26,7 +26,7 @@ GenotypePhenotypeMapParameters::GenotypePhenotypeMapParameters(
 	processDemeSpecificParameters(currentPhenDemewiseVals);
 }
 
-void processParameterNames(const std::vector<std::string>& parameterNames) {
+void processParameterNames(const StringVector& parameterNames) {
 	this->Number_of_Parameters = parameterNames.size();
 	this->Names_of_Genotype_Phenotype_Map_Parameters.resize(parameterNames.size());
 	std::copy(parameterNames.begin(), 

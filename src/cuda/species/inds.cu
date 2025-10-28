@@ -66,16 +66,16 @@ inds::inds(
 	int maxsize_val, 
 	int num_demes, 
 	int species_ID_val, 
-	const std::vector<std::string>&    			 parameterNames, 
-	const py::array_t<float>& 		 			 demeWideParameters, 
-	std::map<std::string, float>& 				 speciesSpecificValues, 
-	const std::vector<std::string>& 			 phenotypeNames, 
-	const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
-	const std::vector<py::array_t<float>>& 		 demeSpecificPhenParametersAllPhenotypes
-	const std::vector<std::string>& 			 lociNames, 
-	const py::array_t<float>& 					 recombinationRates, 
-	const py::array_t<float>&  					 demeSpecificMutationRates, 
-	const py::array_t<float>&					 demeSpecificMutationMagnitudes
+	const StringVector&    		parameterNames, 
+	const py::array_t<float>& 	demeWideParameters, 
+	const StringFloatMap& 		speciesSpecificValues, 
+	const StringVector& 		phenotypeNames, 
+	const String2DVector& 		genPhenParameterNamesAllPhenotypes, 
+	const FloatArrayVector& 	demeSpecificPhenParametersAllPhenotypes, 
+	const StringVector& 		lociNames, 
+	const py::array_t<float>& 	recombinationRates, 
+	const py::array_t<float>&  	demeSpecificMutationRates, 
+	const py::array_t<float>&	demeSpecificMutationMagnitudes
 ) {
 	/*
 	* A very limited initialization method which creates the data structures and performs a basic sanity check to make sure that the maximum and starting numbers of individuals are biologically meaningful.

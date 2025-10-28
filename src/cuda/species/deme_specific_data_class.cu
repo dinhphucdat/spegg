@@ -177,17 +177,17 @@ bool DemeSettings::does_parameter_exist(const char *parameter_name)
 DemeSettings::DemeSettings(
 	const int&									 numDemes,
 	const int&									 speciesID, 
-	const std::vector<std::string>&    			 parameterNames, 
+	const StringVector&    			 			 parameterNames, 
 	const py::array_t<float>& 		 			 demeWideParameters, 
-	std::map<std::string, float>& 				 speciesSpecificValues, 
-	const std::vector<std::string>& 			 phenotypeNames, 
-	const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
-	const std::vector<py::array_t<float>>& 		 demeSpecificPhenParametersAllPhenotypes
-	const std::vector<std::string>& 			 lociNames, 
+	const StringFloatMap& 				 		 speciesSpecificValues, 
+	const StringVector& 			 			 phenotypeNames, 
+	const String2DVector& 						 genPhenParameterNamesAllPhenotypes, 
+	const FloatArrayVector& 		 			 demeSpecificPhenParametersAllPhenotypes, 
+	const StringVector& 			 			 lociNames, 
 	const py::array_t<float>& 					 recombinationRates, 
 	const py::array_t<float>&  					 demeSpecificMutationRates, 
-	const py::array_t<float>&					 demeSpecificMutationMagnitudes
-) {
+	const py::array_t<float>&					 demeSpecificMutationMagnitudes) {
+
 	GeneticArchitecture = new DemeGeneticsSettings(
 		speciesID, 
 		phenotypeNames, 
@@ -203,8 +203,8 @@ DemeSettings::DemeSettings(
 }
 
 void DemeSettings::processParameters(
-	const int&						 numDemes, 
-	const std::vector<std::string>&    parameterNames, 
+	const int&						 numDemes,
+	const StringVector&    			 parameterNames, 
 	const py::array_t<float>& 		 demeWideParameters
 ) {
 	this->Number_of_Parameters = parameterNames.size();
@@ -230,7 +230,7 @@ void DemeSettings::processParameters(
 	numpy_array_to_thrust_vector<float>(deme_wide_parameters, demeWideParamArr);
 }
 
-void DemeSettings::processDemeSpecificValues(const std::map<std::string, float>& speciesSpecificValues) {
+void DemeSettings::processDemeSpecificValues(const StringFloatMap& speciesSpecificValues) {
 	species_specific_values = speciesSpecificValues;
 	this->Number_of_Species_Specific_Values = species_specific_values.size();
 

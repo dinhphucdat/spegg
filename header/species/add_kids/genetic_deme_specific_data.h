@@ -7,6 +7,7 @@
 #include <string>
 #include <curand.h>
 #include <map>
+#include <vector>
 #include <thrust/device_vector.h>
 #include <thrust/functional.h>
 
@@ -22,6 +23,9 @@
 
 using namespace libconfig;
 namespace py = pybind11;
+namespace StringVector = std::vector<std::string>;
+namespace String2DVector = std::vector<std::vector<std::string>>;
+namespace FloatArrayVector = std::vector<py::array_t<float>>;
 
 /**
  * @brief A class to read in and store genetic parameters that are deme-specific
@@ -63,10 +67,10 @@ class DemeGeneticsSettings
 		 */
 		DemeGeneticsSettings(
 			const int&									 speciesID, 
-			const std::vector<std::string>& 			 phenotypeNames, 
-			const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
-			const std::vector<py::array_t<float>>& 		 demeSpecificPhenParametersAllPhenotypes
-			const std::vector<std::string>& 			 lociNames, 
+			const StringVector& 			 		 	 phenotypeNames, 
+			const String2DVector& 						 genPhenParameterNamesAllPhenotypes, 
+			const FloatArrayVector& 		 			 demeSpecificPhenParametersAllPhenotypes,
+			const StringVector& 			 			 lociNames, 
 			const py::array_t<float>& 					 recombinationRates, 
 			const py::array_t<float>&  					 demeSpecificMutationRates, 
 			const py::array_t<float>&					 demeSpecificMutationMagnitudes
@@ -136,7 +140,7 @@ class DemeGeneticsSettings
 		 * @param demeSpecificMutationMagnitudes a numpy array of deme-specific mutation magnitudes. Dimension 1 is number of loci, dimension 2 is that locus's mutation magnitude for every deme
 		 */
 		void processGenotypicInfo(
-			const std::vector<std::string>&  lociNames, 
+			const StringVector&  			 lociNames, 
 			const py::array_t<float>&  	 	 recombinationRates, 
 			const py::array_t<float>& 	 	 demeSpecificMutationRates, 
 			const py::array_t<float>&		 demeSpecificMutationMagnitudes
@@ -153,10 +157,10 @@ class DemeGeneticsSettings
 		 * @param demeSpecificPhenParametersAllPhenotypes a Python list of 2D numpy arrays. The list should have the size of the number of phenotypes, and for each numpy array, dimension 1 should be subparameters, and dimension 2 should be the value of that specific subparameter for every deme
 		 */
 		void processPhenotypicInfo(
-			const int& 									 speciesID, 
-			const std::vector<std::string>& 			 phenotypeNames, 
-			const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
-			const std::vector<py::array_t<float>>& 		 demeSpecificPhenParametersAllPhenotypes
+			const int& 				speciesID, 
+			const StringVector& 	phenotypeNames, 
+			const String2DVector& 	genPhenParameterNamesAllPhenotypes, 
+			const FloatArrayVector& demeSpecificPhenParametersAllPhenotypes
 		);
 
 		// -------------- END OF THIS NEW FUNCTIONALITY -------------------- //

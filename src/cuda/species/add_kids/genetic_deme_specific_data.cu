@@ -147,10 +147,10 @@ DemeGeneticsSettings::~DemeGeneticsSettings() {
 // --------------------- NEW FUNCTIONALITY - READ FROM PYTHON ------------------------ //
 DemeGeneticsSettings::DemeGeneticsSettings(
 	const int&									 speciesID, 
-	const std::vector<std::string>& 			 phenotypeNames, 
-	const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
-	const std::vector<py::array_t<float>>& 		 demeSpecificPhenParametersAllPhenotypes
-	const std::vector<std::string>& 			 lociNames, 
+	const StringVector& 			 		 	 phenotypeNames, 
+	const String2DVector& 						 genPhenParameterNamesAllPhenotypes, 
+	const FloatArrayVector& 		 			 demeSpecificPhenParametersAllPhenotypes, 
+	const StringVector& 			 			 lociNames, 
 	const py::array_t<float>& 					 recombinationRates, 
 	const py::array_t<float>&  					 demeSpecificMutationRates, 
 	const py::array_t<float>&					 demeSpecificMutationMagnitudes
@@ -171,7 +171,7 @@ DemeGeneticsSettings::DemeGeneticsSettings(
 }
 
 void DemeGeneticsSettings::processGenotypicInfo(
-	const std::vector<std::string>&  lociNames, 
+	const StringVector&  			 lociNames, 
 	const py::array_t<float>&  	 	 recombinationRates, 
 	const py::array_t<float>& 	 	 demeSpecificMutationRates, 
 	const py::array_t<float>&		 demeSpecificMutationMagnitudes
@@ -242,10 +242,10 @@ void DemeGeneticsSettings::processGenotypicInfo(
 }
 
 void DemeGeneticsSettings::processPhenotypicInfo(
-	const int& 									 speciesID, 
-	const std::vector<std::string>& 			 phenotypeNames, 
-	const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
-	const std::vector<py::array_t<float>>& 		 demeSpecificPhenParametersAllPhenotypes
+	const int& 				speciesID, 
+	const StringVector& 	phenotypeNames, 
+	const String2DVector& 	genPhenParameterNamesAllPhenotypes, 
+	const FloatArrayVector& demeSpecificPhenParametersAllPhenotypes
 ) {
 	// number of phenotypes, phenotype names
 	this->Number_of_Phenotypes = phenotypeNames.size();

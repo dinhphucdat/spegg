@@ -1,6 +1,10 @@
 #ifndef STOCHASTIC_INDS_H
 #define STOCHASTIC_INDS_H
 
+#include <string>
+#include <vector>
+#include <map>
+
 #include <species/inds.h>
 #include <math/random_variables_functions.h>
 
@@ -13,6 +17,10 @@
 #include <util/python_thrust_api.h>
 
 namespace py = pybind11;
+namespace StringVector = std::vector<std::string>;
+namespace String2DVector = std::vector<std::vector<std::string>>;
+namespace StringFloatMap = std::map<std::string, float>;
+namespace FloatArrayVector = std::vector<py::array_t<float>>;
 
 /**
  * This class is a subset of @link inds inds @endlink, used when the initial population's attributes are 
@@ -69,16 +77,16 @@ class inds_stochastic : public inds
 			int seed_val, 
 			int num_demes, 
 			int species_ID_val, 
-			const std::vector<std::string>&    			 parameterNames, 
-			const py::array_t<float>& 		 			 demeWideParameters, 
-			std::map<std::string, float>& 				 speciesSpecificValues, 
-			const std::vector<std::string>& 			 phenotypeNames, 
-			const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
-			const std::vector<py::array_t<float>>& 		 demeSpecificPhenParametersAllPhenotypes
-			const std::vector<std::string>& 			 lociNames, 
-			const py::array_t<float>& 					 recombinationRates, 
-			const py::array_t<float>&  					 demeSpecificMutationRates, 
-			const py::array_t<float>&					 demeSpecificMutationMagnitudes
+			const StringVector&    		parameterNames, 
+			const py::array_t<float>& 	demeWideParameters, 
+			const StringFloatMap& 		speciesSpecificValues, 
+			const StringVector& 		phenotypeNames, 
+			const String2DVector& 		genPhenParameterNamesAllPhenotypes, 
+			const FloatArrayVector& 	demeSpecificPhenParametersAllPhenotypes, 
+			const StringVector& 		lociNames, 
+			const py::array_t<float>& 	recombinationRates, 
+			const py::array_t<float>&  	demeSpecificMutationRates, 
+			const py::array_t<float>&	demeSpecificMutationMagnitudes
 		);
 
 		/**

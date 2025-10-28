@@ -31,16 +31,16 @@ inds_stochastic(
 	int seed_val, 
 	int num_demes, 
 	int species_ID_val, 
-	const std::vector<std::string>&    			 parameterNames, 
-	const py::array_t<float>& 		 			 demeWideParameters, 
-	std::map<std::string, float>& 				 speciesSpecificValues, 
-	const std::vector<std::string>& 			 phenotypeNames, 
-	const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
-	const std::vector<py::array_t<float>>& 		 demeSpecificPhenParametersAllPhenotypes
-	const std::vector<std::string>& 			 lociNames, 
-	const py::array_t<float>& 					 recombinationRates, 
-	const py::array_t<float>&  					 demeSpecificMutationRates, 
-	const py::array_t<float>&					 demeSpecificMutationMagnitudes
+	const StringVector&    		parameterNames, 
+	const py::array_t<float>& 	demeWideParameters, 
+	const StringFloatMap& 		speciesSpecificValues, 
+	const StringVector& 		phenotypeNames, 
+	const String2DVector& 		genPhenParameterNamesAllPhenotypes, 
+	const FloatArrayVector& 	demeSpecificPhenParametersAllPhenotypes, 
+	const StringVector& 		lociNames, 
+	const py::array_t<float>& 	recombinationRates, 
+	const py::array_t<float>&  	demeSpecificMutationRates, 
+	const py::array_t<float>&	demeSpecificMutationMagnitudes
 ) : inds(
 	size_val, 
 	maxsize_val, 

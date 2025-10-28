@@ -7,6 +7,7 @@
 #include <string>
 #include <curand.h>
 #include <map>
+#include <vector>
 #include <thrust/device_vector.h>
 #include <thrust/functional.h>
 #include <algorithm>
@@ -21,6 +22,10 @@
 
 using namespace libconfig;
 namespace py = pybind11;
+namespace StringVector = std::vector<std::string>;
+namespace String2DVector = std::vector<std::vector<std::string>>;
+namespace StringFloatMap = std::map<std::string, float>;
+namespace FloatArrayVector = std::vector<py::array_t<float>>;
 
 /**
  * @brief Collects parameters about genotypes and phenotypes from @c deme_config.txt
@@ -74,8 +79,8 @@ class GenotypePhenotypeMapParameters
 		GenotypePhenotypeMapParameters(
 			const int& species_ID, 
 			const int& phenotype_index, 
-			const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
-			const std::vector<py::array_t<float>>& demeSpecificPhenParametersAllPhenotypes
+			const String2DVector& genPhenParameterNamesAllPhenotypes, 
+			const FloatArrayVector& demeSpecificPhenParametersAllPhenotypes
 		);
 		// ------------ END OF NEW FUNCTIONALITY --------------------------------------------- //
 		~GenotypePhenotypeMapParameters();
@@ -110,7 +115,7 @@ class GenotypePhenotypeMapParameters
 		 * 
 		 * @param parameterNames a vector of parameter names.
 		 */
-		void processParameterNames(const std::vector<std::string>& parameterNames);
+		void processParameterNames(const StringVector& parameterNames);
 		/**
 		 * @brief Put the parameter values across the demes into underlying data structure(s).
 		 * 

@@ -2,6 +2,9 @@
 #define DEME_SPECIFIC_DATA_CLASS_H
 
 #include <species/add_kids/genetic_deme_specific_data.h>
+#include <vector>
+#include <map>
+#include <string>
 
 // Requires libconfig++; after installing, add /usr/local/lib to path via LD_LIBRARY_PATH as well, followed by sudo ldconfig!
 
@@ -23,6 +26,10 @@
 
 using namespace libconfig;
 namespace py = pybind11;
+namespace StringVector = std::vector<std::string>;
+namespace String2DVector = std::vector<std::vector<std::string>>;
+namespace StringFloatMap = std::map<std::string, float>;
+namespace FloatArrayVector = std::vector<py::array_t<float>>;
 
 /**
  * @brief A class to read in and store deme-specific parameters
@@ -66,13 +73,13 @@ class DemeSettings
 		DemeSettings(
 			const int&									 numDemes,
 			const int&									 speciesID, 
-			const std::vector<std::string>&    			 parameterNames, 
+			const StringVector&    			 			 parameterNames, 
 			const py::array_t<float>& 		 			 demeWideParameters, 
-			std::map<std::string, float>& 				 speciesSpecificValues, 
-			const std::vector<std::string>& 			 phenotypeNames, 
-			const std::vector<std::vector<std::string>>& genPhenParameterNamesAllPhenotypes, 
-			const std::vector<py::array_t<float>>& 		 demeSpecificPhenParametersAllPhenotypes
-			const std::vector<std::string>& 			 lociNames, 
+			const StringFloatMap& 				 		 speciesSpecificValues, 
+			const StringVector& 			 			 phenotypeNames, 
+			const String2DVector& 						 genPhenParameterNamesAllPhenotypes, 
+			const FloatArrayVector& 		 			 demeSpecificPhenParametersAllPhenotypes
+			const StringVector& 			 			 lociNames, 
 			const py::array_t<float>& 					 recombinationRates, 
 			const py::array_t<float>&  					 demeSpecificMutationRates, 
 			const py::array_t<float>&					 demeSpecificMutationMagnitudes
@@ -153,7 +160,7 @@ class DemeSettings
 		 */
 		void processParameters(
 			const int&						 numDemes,
-			const std::vector<std::string>&    parameterNames, 
+			const StringVector&    			 parameterNames, 
 			const py::array_t<float>& 		 demeWideParameters
 		);
 
@@ -162,7 +169,7 @@ class DemeSettings
 		 * 
 		 * @param speciesSpecificValues a Python dictionary of species specific values. Keys must be value names and values should be the corresponding float values
 		 */
-		void processDemeSpecificValues(const std::map<std::string, float>& speciesSpecificValues);
+		void processDemeSpecificValues(const StringFloatMap& speciesSpecificValues);
 
 		// ----------------- END OF THIS NEW FUNCTIONALITY ---------------------------- //
 	};
