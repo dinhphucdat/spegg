@@ -105,7 +105,7 @@ inds::inds(
 		speciesSpecificValues, 
 		phenotypeNames, 
 		genPhenParameterNamesAllPhenotypes, 
-		demeSpecificPhenParametersAllPhenotypes
+		demeSpecificPhenParametersAllPhenotypes, 
 		lociNames, 
 		recombinationRates, 
 		demeSpecificMutationRates, 
