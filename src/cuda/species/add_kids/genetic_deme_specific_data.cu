@@ -203,9 +203,7 @@ void DemeGeneticsSettings::processGenotypicInfo(
 	);
 	const py::buffer_info bufRate = demeSpecMutRatesArr.request();
 	if (bufRate.shape.size() != 2) {
-		throw std::runtime_error("The mutation rates array should have two dimensions: " + 
-			"(Number of Loci, Number of Demes)"
-		);
+		throw std::runtime_error("The mutation rates array should have two dimensions: (Number of Loci, Number of Demes)");
 	}
 	if (bufRate.shape[0] != Number_of_Loci) {
 		throw std::runtime_error("The mutation rates outer dimension must match number of Loci");
@@ -224,9 +222,7 @@ void DemeGeneticsSettings::processGenotypicInfo(
 	const py::buffer_info bufMag = demeSpecMutMag.request();
 	if (bufMag.shape.size() != 2) {
 		throw std::runtime_error(
-			"The mutation magnitude array should only have two dimensions: " + 
-			"(Number_of_Loci, Number_of_Demes)"
-		);
+			"The mutation magnitude array should only have two dimensions: (Number_of_Loci, Number_of_Demes)");
 	}
 	if (bufRate.shape[0] != Number_of_Loci) {
 		throw std::runtime_error("The mutation magnitude outer dimension must match number of loci");
