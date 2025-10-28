@@ -26,8 +26,8 @@ GenotypePhenotypeMapParameters::GenotypePhenotypeMapParameters(
 	processDemeSpecificParameters(currentPhenDemewiseVals);
 }
 
-void processParameterNames(const StringVector& parameterNames) {
-	this.Number_of_Parameters = parameterNames.size();
+void GenotypePhenotypeMapParameters::processParameterNames(const StringVector& parameterNames) {
+	Number_of_Parameters = parameterNames.size();
 	Names_of_Genotype_Phenotype_Map_Parameters.resize(parameterNames.size());
 	std::copy(parameterNames.begin(), 
 		parameterNames.end(), 
@@ -35,7 +35,7 @@ void processParameterNames(const StringVector& parameterNames) {
 	specify_parameter_index();
 }
 
-void processDemeSpecificParameters(const py::array_t<float>& demeSpecificParams) {
+void GenotypePhenotypeMapParameters::processDemeSpecificParameters(const py::array_t<float>& demeSpecificParams) {
 	py::array_t<float, py::array::c_style> phenDemewiseVals = (
 			demeSpecificParams
 			.cast<py::array_t<float, py::array::c_style>>()
@@ -48,8 +48,8 @@ void processDemeSpecificParameters(const py::array_t<float>& demeSpecificParams)
 		throw std::runtime_error(
 			"Number of parameters and the first dimension of array (size of number of parameters) are not the same!");
 	}
-	this.Number_of_Demes = static_cast<int>(buf.shape[1]);
-	deme_specific_parameters = new thrust::device_vector<float>[this.Number_of_Parameters];
+	Number_of_Demes = static_cast<int>(buf.shape[1]);
+	deme_specific_parameters = new thrust::device_vector<float>[Number_of_Parameters];
 	numpy_array_to_thrust_vector<float>(
 		deme_specific_parameters, phenDemewiseVals
 	);
