@@ -78,7 +78,7 @@ class DemeSettings
 			const StringFloatMap& 				 		 speciesSpecificValues, 
 			const StringVector& 			 			 phenotypeNames, 
 			const String2DVector& 						 genPhenParameterNamesAllPhenotypes, 
-			const FloatArrayVector& 		 			 demeSpecificPhenParametersAllPhenotypes
+			const FloatArrayVector& 		 			 demeSpecificPhenParametersAllPhenotypes, 
 			const StringVector& 			 			 lociNames, 
 			const py::array_t<float>& 					 recombinationRates, 
 			const py::array_t<float>&  					 demeSpecificMutationRates, 
