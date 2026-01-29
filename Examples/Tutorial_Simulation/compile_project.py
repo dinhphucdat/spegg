@@ -186,8 +186,12 @@ CMAKELISTS = {
         ("set_target_properties", [
             r"${PROJECT_NAME}", 
             "PROPERTIES", 
-            "CUDA_SEPARABLE_COMPILATION", 
-            "ON"
+            "CUDA_SEPARABLE_COMPILATION ON", 
+            "CUDA_RESOLVE_DEVICE_SYMBOLS ON", 
+            "POSITION_INDEPENDENT_CODE ON", 
+            "CXX_VISIBILITY_PRESET default",
+            "CUDA_VISIBILITY_PRESET default",
+            "VISIBILITY_INLINES_HIDDEN OFF"
         ] + [True])
     ], 
 

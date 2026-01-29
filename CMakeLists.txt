@@ -1,6 +1,8 @@
 # Set the minimum version of CMake
 cmake_minimum_required(VERSION 3.10)
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 # Set the project name
 project(spegg LANGUAGES CXX CUDA)
 
@@ -118,7 +120,11 @@ set_target_properties(Simulation_Class inds inds_stochastic inds_stochastic_migr
     one_dim_two_dim remove_duplicate_pairs which_function gather_values_by_deme 
     Sampling_Input Sampling_Event Sample_without_Replacement_1Pass Sample_without_Replacement_byDeme Sample_With_Replacement 
     Sample_without_Replacement_Test species_specific_mate_sampling_rules PROPERTIES 
-    CUDA_SEPARABLE_COMPILATION ON)
+    CUDA_SEPARABLE_COMPILATION ON 
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON 
+    CXX_VISIBILITY_PRESET default
+    CUDA_VISIBILITY_PRESET default
+    VISIBILITY_INLINES_HIDDEN OFF)
 
 # Resolve external libraries
 # Find the libraries
@@ -141,6 +147,12 @@ set(EXTERNAL_LIBS
     ${CUDA_LIB}
     ${RT_LIB}
     ${PYBIND11_LIB}
+    -Wl,--whole-archive 
+    SPEGG::spegg_codebase
+    -Wl,--no-whole-archive
+    pybind11::module 
+    cudart 
+    cudadevrt
 )
 
 # Link target libraries

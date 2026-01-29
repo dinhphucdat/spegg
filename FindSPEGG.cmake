@@ -62,6 +62,11 @@ if (SPEGG_ROOT_DIR)
             ${SPEGG_CUDA_LIB}
             ${SPEGG_RT_LIB}
             ${PYBIND11_LIB}
+            -Wl,--whole-archive 
+            SPEGG::spegg_codebase 
+            -Wl,--no-whole-archive 
+            cudart 
+            cudadevrt
         )
         
         # Create imported target if not already created
