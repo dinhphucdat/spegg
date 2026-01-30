@@ -57,6 +57,8 @@ void numpy_array_to_thrust_vector(
     {
         py::gil_scoped_release release;
         for (size_t r = 0; r < num_rows; r++) {
+            // resize the rth device_vector if necessary
+            target[r].resize(num_cols);
             // raw pointer for the rth row
             T* d_ptr_row = thrust::raw_pointer_cast(target[r].data());
             // increment the base address of buf_ptr

@@ -1,3 +1,0 @@
-/home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest/build/CMakeFiles/AssortativeTest.dir
-/home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest/build/CMakeFiles/edit_cache.dir
-/home/wormlab/OneDrive/Personal_Project/spegg/tests/AssortativeTest/build/CMakeFiles/rebuild_cache.dir

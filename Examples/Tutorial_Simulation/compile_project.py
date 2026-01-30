@@ -36,6 +36,7 @@ SPEGG_ROOT = sys.argv[1]
 IS_READY = sys.argv[2]
 CURAND_DIR = CURAND_LIB_DIR if len(sys.argv) < 4 else sys.argv[3]
 CUDA_DIR = CUDA_LIB_DIR if len(sys.argv) < 4 else sys.argv[4]
+SHARED_OBJECT_OR_EXECUTABLE = "SHARED"  # Change this to "EXECUTABLE" if you want an executable instead of a shared object
 
 class Bracket:
     """
@@ -120,6 +121,22 @@ CMAKELISTS = {
         ("cmake_minimum_required", ["VERSION", "3.13"])
     ],
 
+    "Set the independent compilation for CUDA" :
+    [
+        ("set", ["CMAKE_POSITION_INDEPENDENT_CODE", "ON"])
+    ], 
+
+    "Force PIC for the Python module's own source files (main.cpp)" : 
+    [
+        ("set", ["CMAKE_CXX_FLAGS", r"${CMAKE_CXX_FLAGS} -fPIC"])
+    ], 
+
+    "Set cuda architecture and optimization flags" : 
+    [
+        ("set", ["CMAKE_CUDA_FLAGS", "\""+r"${CMAKE_CUDA_FLAGS} -Xcompiler -fPIC -O3 --extended-lambda --expt-relaxed-constexpr"+"\""]), 
+        ("set", ["CMAKE_CUDA_ARCHITECTURES"] + [str(el) for el in CUDA_ARCH])
+    ], 
+
     "Set the project's name" : 
     [
         ("project", [os.path.basename(Path(".").resolve()), "LANGUAGES", "CXX", "CUDA"])
@@ -151,12 +168,6 @@ CMAKELISTS = {
         ("find_package", ["SPEGG", "REQUIRED"])
     ], 
 
-    "Set cuda architecture and optimization flags" : 
-    [
-        ("set", ["CMAKE_CUDA_FLAGS", "\""+r"${CMAKE_CUDA_FLAGS} -O3 --extended-lambda --expt-relaxed-constexpr"+"\""]), 
-        ("set", ["CMAKE_CUDA_ARCHITECTURES"] + [str(el) for el in CUDA_ARCH])
-    ], 
-
     "Set where the binary would go" :
     [
         ("set", ["CMAKE_RUNTIME_OUTPUT_DIRECTORY", r"${CMAKE_SOURCE_DIR}"])
@@ -172,14 +183,27 @@ CMAKELISTS = {
     "Define src directory" : 
     [
         ("set", ["SRC", r"${CMAKE_SOURCE_DIR}/src"])
-    ],
+    ], 
 
-    "Add executables" : 
+    "Add static library" : 
     [
-        ("add_executable", [r"${PROJECT_NAME}"] +
+        ("add_library", ["sim_static", "STATIC"] + 
             [(r"${SRC}/" + module) for module in ProjectInspector(".").modules] + 
             ["main.cpp", True])
-    ],
+    ], 
+
+    f"Add {SHARED_OBJECT_OR_EXECUTABLE}" : 
+    [
+        ("pybind11_add_module", [r"${PROJECT_NAME}", r"sim_static"]) 
+            if SHARED_OBJECT_OR_EXECUTABLE == "SHARED" else 
+        ("add_executable", [r"${PROJECT_NAME}", r"sim_static"])
+    ], 
+
+    "This is the \"Double-Lock\"":
+        ("target_compile_options", ["sim_static", "PRIVATE",  
+            r"$<$<COMPILE_LANGUAGE:CXX>:-fPIC>", 
+            r"$<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler -fPIC>"]
+        ),
 
     "Enable separable compilation for all CUDA targets" : 
     [
@@ -191,17 +215,31 @@ CMAKELISTS = {
             "POSITION_INDEPENDENT_CODE ON", 
             "CXX_VISIBILITY_PRESET default",
             "CUDA_VISIBILITY_PRESET default",
-            "VISIBILITY_INLINES_HIDDEN OFF"
+            "VISIBILITY_INLINES_HIDDEN OFF", 
+            "LINKER_LANGUAGE CUDA",  
+	        "CUDA_RUNTIME_LIBRARY Shared"
         ] + [True])
     ], 
 
     "Target link to the executable" : 
     [
         ("target_link_libraries", [
-            r"${PROJECT_NAME}", 
+            "sim_static", 
             "PRIVATE", 
             "SPEGG::spegg_codebase"
         ] + [True])
+    ], 
+
+    "Final linking with curand and cuda libraries" :
+    [
+        ("target_link_libraries", [
+	        r"${PROJECT_NAME}",  
+            "PRIVATE", 
+            "-Wl,--whole-archive sim_objects SPEGG::spegg_codebase -Wl,--no-whole-archive", 
+            r"${CUDA_LIBRARIES}", 
+            "cudart", 
+            "curand"]
+        )
     ]
 }
 

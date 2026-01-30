@@ -8,6 +8,9 @@ if (SPEGG_ROOT)
     get_filename_component(SPEGG_ROOT ${SPEGG_ROOT} ABSOLUTE)
 endif()
 
+# Find cuda
+# find_dependency(CUDA REQUIRED)
+
 # Find the root directory
 find_path(SPEGG_ROOT_DIR 
     NAMES CMakeLists.txt 
@@ -35,14 +38,22 @@ if (SPEGG_ROOT_DIR)
         ${SPEGG_ROOT_DIR}/header/species/update
         ${SPEGG_ROOT_DIR}/header/util
     )
-    # Find the compiled libraries directory
-    set(SPEGG_LIB_DIR ${SPEGG_ROOT_DIR}/lib)
+
+    # Find the compiled object's path
+    set(SPEGG_LIB_DIR ${SPEGG_ROOT_DIR}/build/CMakeFiles)
+
     set(CURAND_DIR "/usr/local/cuda/lib64")
-    # Find all static libraries
-    file(GLOB SPEGG_LIBRARIES "${SPEGG_LIB_DIR}/*.a")
+
     # Check if all binary files are found
-    if (SPEGG_LIBRARIES)
+    if (SPEGG_LIB_DIR AND SPEGG_INCLUDE_DIRS)
         set(SPEGG_FOUND TRUE)
+        # Find all object files
+        # file(GLOB_RECURSE SPEGG_LIBRARIES "${SPEGG_LIB_DIR}/spegg_obj.dir/*.o")
+        file(GLOB_RECURSE SPEGG_LIBRARIES "${SPEGG_ROOT_DIR}/*.a")
+        if(NOT SPEGG_LIBRARIES)
+            message(WARNING "SPEGG_LIBRARIES is empty! No .a file found in ${SPEGG_LIB_DIR}/")
+            set(SPEGG_FOUND FALSE)
+        endif()
         # Find external dependencies that SPEGG needs
         find_library(SPEGG_LIBCONFIG_LIB config++ REQUIRED)
         message(STATUS "curand dir is ${CURAND_DIR}")
@@ -61,12 +72,7 @@ if (SPEGG_ROOT_DIR)
             ${SPEGG_CURAND_LIB}
             ${SPEGG_CUDA_LIB}
             ${SPEGG_RT_LIB}
-            ${PYBIND11_LIB}
-            -Wl,--whole-archive 
-            SPEGG::spegg_codebase 
-            -Wl,--no-whole-archive 
-            cudart 
-            cudadevrt
+            ${PYBIND11_LIB} 
         )
         
         # Create imported target if not already created

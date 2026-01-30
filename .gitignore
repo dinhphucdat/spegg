@@ -1,11 +1,31 @@
-*.txt~
+
 *.cu~
 *.h~
-*.o
+
 *.cpp~
 *.swp
 *~
 server.sh
-lib/
+**/lib/
 **/build/
 pybind11/
+
+# Ignore all objects, static and shared objects
+**/*.o
+**/*.so
+**/*.a
+
+# Ignore all text and csv
+**/*.txt
+**/*.csv
+
+# Don't do that with deme_config.txt
+!**/deme_config.txt
+
+# Ignore all the executables
+**/DataTransferTest
+**/AssortativeTest
+**/Tutorial_Simulation
+**/PhysiologicalStructure_LifeHistoryEvolution
+**/HillClimbing
+**/CoevolvingSpecies
