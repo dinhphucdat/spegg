@@ -24,6 +24,25 @@ class Penguins : public inds_stochastic
 	{
 	public:
 		Penguins(int size_val, int maxsize_val, int seed_val, int ndemes, int species_ID_val);
+
+		Penguins(
+			int size_val, 
+			int maxsize_val, 
+			int seed_val, 
+			int ndemes, 
+			int species_ID_val, 
+			const StringVector&    		parameterNames, 
+			const py::array_t<float>& 	demeWideParameters, 
+			const StringFloatMap& 		speciesSpecificValues, 
+			const StringVector& 		phenotypeNames, 
+			const String2DVector& 		genPhenParameterNamesAllPhenotypes, 
+			const FloatArrayVector& 	demeSpecificPhenParametersAllPhenotypes, 
+			const StringVector& 		lociNames, 
+			const py::array_t<float>& 	recombinationRates, 
+			const py::array_t<float>&  	demeSpecificMutationRates, 
+			const py::array_t<float>&	demeSpecificMutationMagnitudes
+		);
+
 		void addKids();
 
 		using inds_stochastic::update;

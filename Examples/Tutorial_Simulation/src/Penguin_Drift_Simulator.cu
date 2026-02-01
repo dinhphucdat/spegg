@@ -97,7 +97,10 @@ void Penguin_Drift_Simulator::run()
 			array[i]->update(array);
 			array[i]->removeDead();
 			}
+
+		std::cout << "\rIteration " << (t + 1) << "/" << nsteps << std::flush;
 		}
+	std::cout << std::endl;
 
 	int genotype_index_of_interest = 2;
 

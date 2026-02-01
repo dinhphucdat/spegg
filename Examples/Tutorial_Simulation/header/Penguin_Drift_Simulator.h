@@ -23,12 +23,39 @@ class Penguin_Drift_Simulator : public Simulation
 	{
 	public:
 		Penguin_Drift_Simulator();
+
+		Penguin_Drift_Simulator(
+			const StringVector&    		parameterNames, 
+			const py::array_t<float>& 	demeWideParameters, 
+			const StringFloatMap& 		speciesSpecificValues, 
+			const StringVector& 		phenotypeNames, 
+			const String2DVector& 		genPhenParameterNamesAllPhenotypes, 
+			const FloatArrayVector& 	demeSpecificPhenParametersAllPhenotypes, 
+			const StringVector& 		lociNames, 
+			const py::array_t<float>& 	recombinationRates, 
+			const py::array_t<float>&  	demeSpecificMutationRates, 
+			const py::array_t<float>&	demeSpecificMutationMagnitudes
+		);
+
 		~Penguin_Drift_Simulator();
 		void run();
 	private:
 		inds_stochastic **array;
 		Statistics *stats_penguins;
 		void initialize_classes();
+
+		void initialize_classes(
+			const StringVector&    		parameterNames, 
+			const py::array_t<float>& 	demeWideParameters, 
+			const StringFloatMap& 		speciesSpecificValues, 
+			const StringVector& 		phenotypeNames, 
+			const String2DVector& 		genPhenParameterNamesAllPhenotypes, 
+			const FloatArrayVector& 	demeSpecificPhenParametersAllPhenotypes, 
+			const StringVector& 		lociNames, 
+			const py::array_t<float>& 	recombinationRates, 
+			const py::array_t<float>&  	demeSpecificMutationRates, 
+			const py::array_t<float>&	demeSpecificMutationMagnitudes
+		);
 
 		int nspecies;
 	};

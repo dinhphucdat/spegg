@@ -190,21 +190,23 @@ CMAKELISTS = {
     [
         ("add_library", ["sim_static", "STATIC"] + 
             [(r"${SRC}/" + module) for module in ProjectInspector(".").modules] + 
-            ["main.cpp", True])
+            [True])
     ], 
 
     f"Add {SHARED_OBJECT_OR_EXECUTABLE}" : 
     [
-        ("pybind11_add_module", [r"${PROJECT_NAME}", r"sim_static"]) 
+        ("pybind11_add_module", [r"${PROJECT_NAME}", r"main.cpp"]) 
             if SHARED_OBJECT_OR_EXECUTABLE == "SHARED" else 
-        ("add_executable", [r"${PROJECT_NAME}", r"sim_static"])
+        ("add_executable", [r"${PROJECT_NAME}", r"main.cpp"])
     ], 
 
     "This is the \"Double-Lock\"":
+    [
         ("target_compile_options", ["sim_static", "PRIVATE",  
             r"$<$<COMPILE_LANGUAGE:CXX>:-fPIC>", 
             r"$<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler -fPIC>"]
-        ),
+        )
+    ],
 
     "Enable separable compilation for all CUDA targets" : 
     [
@@ -236,10 +238,10 @@ CMAKELISTS = {
         ("target_link_libraries", [
 	        r"${PROJECT_NAME}",  
             "PRIVATE", 
-            "-Wl,--whole-archive sim_objects SPEGG::spegg_codebase -Wl,--no-whole-archive", 
+            "-Wl,--whole-archive sim_static SPEGG::spegg_codebase -Wl,--no-whole-archive", 
             r"${CUDA_LIBRARIES}", 
             "cudart", 
-            "curand"]
+            "curand"] + [True]
         )
     ]
 }
