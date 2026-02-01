@@ -76,7 +76,7 @@ inds::inds(
 	const py::array_t<float>& 	recombinationRates, 
 	const py::array_t<float>&  	demeSpecificMutationRates, 
 	const py::array_t<float>&	demeSpecificMutationMagnitudes
-) {
+) : size(size_val), maxsize(maxsize_val), Num_Demes(num_demes), nextid(size_val), species_ID(species_ID_val) {
 	/*
 	* A very limited initialization method which creates the data structures and performs a basic sanity check to make sure that the maximum and starting numbers of individuals are biologically meaningful.
 	*/
@@ -123,12 +123,10 @@ inds::inds(
 
 	initialize_individuals(nloci, nphen);
 	//Set maxsize.
-	maxsize = maxsize_val;
 	setMaxSize(maxsize);
 
 	demeCalculations();
 	//Fill in ID, STATUS, and DEME.
-	size = size_val;
 	thrust::sequence(id.begin(), id.begin() + size);
 	thrust::fill(status.begin(), status.begin() + size, 1);
 }
@@ -215,6 +213,7 @@ inds::~inds()
 	delete[] fgenotype;
 	delete[] mgenotype;
 	delete[] phenotype;
+	delete demeParameters;
 	}
 
 void inds::exportCsv()

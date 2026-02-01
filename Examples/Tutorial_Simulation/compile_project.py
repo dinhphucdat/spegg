@@ -8,7 +8,8 @@ User's manual:
     2. Optional: modify GPU_ARCH, CURAND_LIB_DIR and CUDA_LIB_DIR as needed
     3. In the terminal, type:
 
-        $ python3 compile_project.py <your_spegg_codebase_directory> <0 if only need to generate cmake, 1 if ready to build>
+        $ python3 compile_project.py <your_spegg_codebase_directory> 
+            <0 if only need to generate cmake, 1 if ready to build> 
 
 -----------------------------------------------------------------
 Author: Dat Dinh

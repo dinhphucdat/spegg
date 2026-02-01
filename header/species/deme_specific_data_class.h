@@ -85,6 +85,8 @@ class DemeSettings
 			const py::array_t<float>&					 demeSpecificMutationMagnitudes
 		);
 
+		~DemeSettings();
+
 		// ----------------- END OF THIS NEW FUNCTIONALITY ---------------------------- //
 
 		/// @brief vector of parameters, with each parameter having a smaller array containing deme-specific information by deme

@@ -10,11 +10,76 @@ Penguin_Drift_Simulator::Penguin_Drift_Simulator() : Simulation()
 	initialize_classes();
 	}
 
+Penguin_Drift_Simulator::Penguin_Drift_Simulator(
+	const StringVector&    		parameterNames, 
+	const py::array_t<float>& 	demeWideParameters, 
+	const StringFloatMap& 		speciesSpecificValues, 
+	const StringVector& 		phenotypeNames, 
+	const String2DVector& 		genPhenParameterNamesAllPhenotypes, 
+	const FloatArrayVector& 	demeSpecificPhenParametersAllPhenotypes, 
+	const StringVector& 		lociNames, 
+	const py::array_t<float>& 	recombinationRates, 
+	const py::array_t<float>&  	demeSpecificMutationRates, 
+	const py::array_t<float>&	demeSpecificMutationMagnitudes
+) : Simulation()
+	{
+	initpop =50*demes;
+	maxpop = 1000*demes;
+
+	nspecies = 1;
+	
+	initialize_classes(
+		parameterNames, 
+		demeWideParameters, 
+		speciesSpecificValues, 
+		phenotypeNames, 
+		genPhenParameterNamesAllPhenotypes, 
+		demeSpecificPhenParametersAllPhenotypes, 
+		lociNames, 
+		recombinationRates, 
+		demeSpecificMutationRates, 
+		demeSpecificMutationMagnitudes
+	);
+	}
+
 void Penguin_Drift_Simulator::initialize_classes()
 	{
 	array = new inds_stochastic *[nspecies];
 	int species_ID = 0;
 	array[0] = new Penguins(initpop, maxpop, seed, demes, species_ID);
+
+	stats_penguins = new Statistics(demes);
+
+	array[0]-> exportCsv("initial_data.csv");
+	}
+
+void Penguin_Drift_Simulator::initialize_classes(
+	const StringVector&    		parameterNames, 
+	const py::array_t<float>& 	demeWideParameters, 
+	const StringFloatMap& 		speciesSpecificValues, 
+	const StringVector& 		phenotypeNames, 
+	const String2DVector& 		genPhenParameterNamesAllPhenotypes, 
+	const FloatArrayVector& 	demeSpecificPhenParametersAllPhenotypes, 
+	const StringVector& 		lociNames, 
+	const py::array_t<float>& 	recombinationRates, 
+	const py::array_t<float>&  	demeSpecificMutationRates, 
+	const py::array_t<float>&	demeSpecificMutationMagnitudes
+)
+	{
+	array = new inds_stochastic *[nspecies];
+	int species_ID = 0;
+	array[0] = new Penguins(initpop, maxpop, seed, demes, species_ID, 
+		parameterNames, 
+		demeWideParameters, 
+		speciesSpecificValues, 
+		phenotypeNames, 
+		genPhenParameterNamesAllPhenotypes, 
+		demeSpecificPhenParametersAllPhenotypes, 
+		lociNames, 
+		recombinationRates, 
+		demeSpecificMutationRates, 
+		demeSpecificMutationMagnitudes
+	);
 
 	stats_penguins = new Statistics(demes);
 

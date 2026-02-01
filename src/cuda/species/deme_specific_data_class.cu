@@ -172,6 +172,11 @@ bool DemeSettings::does_parameter_exist(const char *parameter_name)
 		}
 	}
 
+DemeSettings::~DemeSettings() {
+	delete[] deme_wide_parameters;
+	delete GeneticArchitecture;
+}
+
 // ------------------------------- NEW FUNCTIONALITY - PYTHON PARAM PASSING ------------------------------ //
 
 DemeSettings::DemeSettings(

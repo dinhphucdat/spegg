@@ -30,6 +30,49 @@ Penguins::Penguins(int size_val, int maxsize_val, int seed_val, int ndemes, int 
 	thrust::transform(id.begin(), id.begin() + size, twos.begin(), sex.begin(), thrust::modulus<int>());
 	}
 
+Penguins::Penguins(
+	int size_val, 
+	int maxsize_val, 
+	int seed_val, 
+	int ndemes, 
+	int species_ID_val, 
+	const StringVector&    		parameterNames, 
+	const py::array_t<float>& 	demeWideParameters, 
+	const StringFloatMap& 		speciesSpecificValues, 
+	const StringVector& 		phenotypeNames, 
+	const String2DVector& 		genPhenParameterNamesAllPhenotypes, 
+	const FloatArrayVector& 	demeSpecificPhenParametersAllPhenotypes, 
+	const StringVector& 		lociNames, 
+	const py::array_t<float>& 	recombinationRates, 
+	const py::array_t<float>&  	demeSpecificMutationRates, 
+	const py::array_t<float>&	demeSpecificMutationMagnitudes
+) : inds_stochastic(size_val, maxsize_val, seed_val, ndemes, species_ID_val, parameterNames, 
+		demeWideParameters, speciesSpecificValues, phenotypeNames, 
+		genPhenParameterNamesAllPhenotypes, demeSpecificPhenParametersAllPhenotypes, 
+		lociNames, recombinationRates, demeSpecificMutationRates, demeSpecificMutationMagnitudes
+	)
+	{
+	// Assume everyone starts at age = 0.
+	thrust::fill(age.begin(), age.begin() + size, 0);
+
+	initialize_demes();
+	
+	// Specify the genetics by assuming allelic values are gaussian-distributed
+	for (int i=0; i < nloci; i++)
+		{		
+		draw_gaussian(size, 0, 0.1, fgenotype[i], gen);
+		draw_gaussian(size, 0, 0.1, mgenotype[i], gen);
+		}
+
+	//Set phenotype
+	setPhenotype(0, size);
+
+	// To start, assign odd numbered individuals to be male, even numbered individuals to be female
+	thrust::device_vector<int> twos(size);
+	thrust::fill(twos.begin(), twos.end(), 2);
+	thrust::transform(id.begin(), id.begin() + size, twos.begin(), sex.begin(), thrust::modulus<int>());
+	}
+
 
 void Penguins::addKids()
 	{   

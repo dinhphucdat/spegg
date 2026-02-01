@@ -208,7 +208,7 @@ void DemeGeneticsSettings::processGenotypicInfo(
 	if (bufRate.shape[0] != Number_of_Loci) {
 		throw std::runtime_error("The mutation rates outer dimension must match number of Loci");
 	}
-	Number_of_Demes = static_cast<int>(buf.shape[1]);
+	Number_of_Demes = static_cast<int>(bufRate.shape[1]);
 	deme_specific_mutation_rates = new thrust::device_vector<float>[Number_of_Loci];
 	numpy_array_to_thrust_vector<float>(
 		deme_specific_mutation_rates, 
@@ -225,10 +225,16 @@ void DemeGeneticsSettings::processGenotypicInfo(
 			"The mutation magnitude array should only have two dimensions: (Number_of_Loci, Number_of_Demes)");
 	}
 	if (bufRate.shape[0] != Number_of_Loci) {
-		throw std::runtime_error("The mutation magnitude outer dimension must match number of loci");
+		throw std::runtime_error(
+			"The mutation magnitude outer dimension must match number of loci:" + 
+			std::to_string(Number_of_Loci)
+		);
 	}
 	if (bufRate.shape[1] != Number_of_Demes) {
-		throw std::runtime_error("The mutation magnitude inner dimension must match number of demes");
+		throw std::runtime_error(
+			"The mutation magnitude inner dimension must match number of demes: " + 
+			std::to_string(Number_of_Demes)
+		);
 	}
 	deme_specific_mutation_magnitudes = new thrust::device_vector<float>[Number_of_Loci];
 	numpy_array_to_thrust_vector<float>(

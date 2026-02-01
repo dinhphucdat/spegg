@@ -47,8 +47,8 @@ void numpy_array_to_thrust_vector(
     // intialize an empty thrust::device_vector*
     // if the driver decides to initialize a thrust::device_vector pointer themselves, 
     // they need to make sure that it is of the correct size
-    if (!target) {
-        target = new thrust::device_vector<T>[size];
+    if (target == nullptr) {
+        target = new thrust::device_vector<T>[num_rows];
     }
     // get the raw pointer of the device_vector's data
     
@@ -67,6 +67,8 @@ void numpy_array_to_thrust_vector(
             cudaError_t err = cudaMemcpy(
                 d_ptr_row, buf_ptr_row, num_cols * sizeof(T), cudaMemcpyHostToDevice
             );
+
+            cudaDeviceSynchronize();
 
             if (err != cudaSuccess) {
                 throw std::runtime_error(
@@ -117,6 +119,7 @@ void numpy_array_to_thrust_vector(
         cudaError_t err = cudaMemcpy(
             d_ptr, buf_ptr, size * sizeof(T), cudaMemcpyHostToDevice
         );
+        cudaDeviceSynchronize();
         if (err != cudaSuccess) {
             throw std::runtime_error(std::string("cudaMemcpy failed in transfering data!") + cudaGetErrorString(err));
         }
