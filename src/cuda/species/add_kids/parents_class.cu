@@ -64,9 +64,9 @@ void Parents::determine_parental_reproductive_potential()
 	if (Potential_Number_of_Kids < 0)
 		{
 		std::cout << "Potential number of kids shouldn't be negative" << std::endl;
-		for (int i=0; i < kids_per_mom.size(); i++)
-			std::cout << kids_per_mom[i] << std::endl;
-		}
+		// for (int i=0; i < kids_per_mom.size(); i++)
+		//	std::cout << kids_per_mom[i] << std::endl;
+		//}
 	}
 
 void Parents::finalize_parental_reproductive_probabilities()
